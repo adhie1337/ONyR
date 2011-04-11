@@ -1,0 +1,10 @@
+D:\projects\cs\szakdoga\ONyR\ONyR_client\bin\Debug\ONyR_client.exe.config
+D:\projects\cs\szakdoga\ONyR\ONyR_client\bin\Debug\ONyR_client.exe
+D:\projects\cs\szakdoga\ONyR\ONyR_client\bin\Debug\ONyR_client.pdb
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.Form1.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.Properties.Resources.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.exe
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.pdb
