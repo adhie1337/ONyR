@@ -56,7 +56,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\Service1Reference\Reference.cs">
+    <Compile Include="Service References\AuthenticationService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\EchoService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -73,7 +78,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -83,17 +90,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\Service1Reference\ONyR_client.Service1Reference.CompositeType.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\Service1Reference\Service1.wsdl" />
-    <None Include="Service References\Service1Reference\Service1.xsd">
+    <None Include="Service References\AuthenticationService\AuthenticationService.wsdl" />
+    <None Include="Service References\AuthenticationService\AuthenticationService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service1Reference\Service11.xsd">
+    <None Include="Service References\AuthenticationService\AuthenticationService1.wsdl" />
+    <None Include="Service References\AuthenticationService\AuthenticationService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\Service1Reference\Service12.xsd">
+    <None Include="Service References\EchoService\EchoService.wsdl" />
+    <None Include="Service References\EchoService\EchoService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EchoService\EchoService1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -101,19 +110,35 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\Service1Reference\" />
+    <WCFMetadataStorage Include="Service References\AuthenticationService\" />
+    <WCFMetadataStorage Include="Service References\EchoService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service1Reference\Service1.disco" />
+    <None Include="Service References\AuthenticationService\AuthenticationService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service1Reference\configuration91.svcinfo" />
+    <None Include="Service References\AuthenticationService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service1Reference\configuration.svcinfo" />
+    <None Include="Service References\AuthenticationService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Service1Reference\Reference.svcmap">
+    <None Include="Service References\AuthenticationService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EchoService\EchoService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EchoService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EchoService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\EchoService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

@@ -6,6 +6,29 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ONyR_client", "ONyR_client\ONyR_client.csproj", "{97F3BF25-AF13-49D5-B1DF-CE413DBAB18E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8E6F7880-1C91-4DE1-AE17-175AAABF0042} = {8E6F7880-1C91-4DE1-AE17-175AAABF0042}
+		{D909658A-431B-474B-9DCA-CA40D667353C} = {D909658A-431B-474B-9DCA-CA40D667353C}
+	EndProjectSection
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ONyRSite", "ONyRSite\", "{D909658A-431B-474B-9DCA-CA40D667353C}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{8E6F7880-1C91-4DE1-AE17-175AAABF0042}|ONyR_server.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/ONyRSite"
+		Debug.AspNetCompiler.PhysicalPath = "ONyRSite\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ONyRSite\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/ONyRSite"
+		Release.AspNetCompiler.PhysicalPath = "ONyRSite\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\ONyRSite\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "49368"
+		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
 Global
@@ -38,6 +61,16 @@ Global
 		{97F3BF25-AF13-49D5-B1DF-CE413DBAB18E}.Release|Mixed Platforms.Build.0 = Release|x86
 		{97F3BF25-AF13-49D5-B1DF-CE413DBAB18E}.Release|x86.ActiveCfg = Release|x86
 		{97F3BF25-AF13-49D5-B1DF-CE413DBAB18E}.Release|x86.Build.0 = Release|x86
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D909658A-431B-474B-9DCA-CA40D667353C}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

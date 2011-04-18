@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ONyR_client.EchoService;
+using ONyR_client.AuthenticationService;
 
 namespace ONyR_client
 {
@@ -29,11 +31,48 @@ namespace ONyR_client
                 lblAnswer.Text = "Rendes számot kérek!";
             }
 
-            Service1Reference.Service1Client client = new Service1Reference.Service1Client();
+            EchoServiceClient client = new EchoServiceClient();
 
-            lblAnswer.Text = client.GetData(i);
+            lblAnswer.Text = client.Echo(i.ToString());
 
             client.Close();
+        }
+
+        private void btnAuth_Click(object sender, EventArgs e)
+        {
+            AuthenticationServiceClient authClient = new AuthenticationServiceClient();
+            
+            if (authClient.Login(txtUserName.Text, txtPass.Text, "", false))
+            {
+                lblLoggedIn.Text = "Just logged In";
+                btnLogout.Enabled = true;
+            }
+            else
+            {
+                lblLoggedIn.Text = "Not logged In";
+                btnLogout.Enabled = false;
+            }
+
+            authClient.Close();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            AuthenticationServiceClient authClient = new AuthenticationServiceClient();
+
+            if (authClient.IsLoggedIn())
+            {
+                authClient.Logout();
+                authClient.Close();
+                lblLoggedIn.Text = "Not logged In";
+                btnLogout.Enabled = false;
+            }
+            else
+            {
+                authClient.Close();
+                throw new Exception("Nem is vagy loginolva baze!");
+            }
+
         }
     }
 }
