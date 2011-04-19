@@ -6,8 +6,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ONyR_client.EchoService;
-using ONyR_client.AuthenticationService;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Net;
+using ONyR_client.Services;
 
 namespace ONyR_client
 {
@@ -20,31 +22,24 @@ namespace ONyR_client
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            int i = -1;
-
+            string message = txtParam.Text;
             try
             {
-                i = Convert.ToInt32(txtParam.Text);
+                lblAnswer.Text = EchoService.Echo(message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                lblAnswer.Text = "Rendes számot kérek!";
+                MessageBox.Show(this, String.Format("Error: {0}", ex.Message), "Error");
+
+                lblAnswer.Text = "Error";
             }
-
-            EchoServiceClient client = new EchoServiceClient();
-
-            lblAnswer.Text = client.Echo(i.ToString());
-
-            client.Close();
         }
 
         private void btnAuth_Click(object sender, EventArgs e)
         {
-            AuthenticationServiceClient authClient = new AuthenticationServiceClient();
-            
-            if (authClient.Login(txtUserName.Text, txtPass.Text, "", false))
+            if (AuthenticationService.Login(txtUserName.Text, txtPass.Text))
             {
-                lblLoggedIn.Text = "Just logged In";
+                lblLoggedIn.Text = String.Format("Just logged in as {0}", txtUserName.Text);
                 btnLogout.Enabled = true;
             }
             else
@@ -52,25 +47,18 @@ namespace ONyR_client
                 lblLoggedIn.Text = "Not logged In";
                 btnLogout.Enabled = false;
             }
-
-            authClient.Close();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            AuthenticationServiceClient authClient = new AuthenticationServiceClient();
-
-            if (authClient.IsLoggedIn())
+            if (AuthenticationService.IsLoggedIn())
             {
-                authClient.Logout();
-                authClient.Close();
-                lblLoggedIn.Text = "Not logged In";
-                btnLogout.Enabled = false;
+                AuthenticationService.Logout();
+                lblLoggedIn.Text = "Logout successful!";
             }
             else
             {
-                authClient.Close();
-                throw new Exception("Nem is vagy loginolva baze!");
+                lblLoggedIn.Text = "You were already logged out! -.-";
             }
 
         }

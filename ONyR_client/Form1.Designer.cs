@@ -33,15 +33,15 @@
             this.lblAnswer = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.txtPass = new System.Windows.Forms.TextBox();
             this.btnAuth = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.lblLoggedIn = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
+            this.lblLoggedIn = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -103,24 +103,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Auth. Service";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Usernév:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 26);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Pass:";
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.label1);
@@ -134,12 +116,30 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(278, 83);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Usernév:";
+            // 
             // txtUserName
             // 
             this.txtUserName.Location = new System.Drawing.Point(59, 3);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(216, 20);
             this.txtUserName.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 26);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(33, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Pass:";
             // 
             // txtPass
             // 
@@ -170,6 +170,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Session";
             // 
+            // btnLogout
+            // 
+            this.btnLogout.Location = new System.Drawing.Point(197, 15);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(75, 23);
+            this.btnLogout.TabIndex = 1;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
             // lblLoggedIn
             // 
             this.lblLoggedIn.AutoSize = true;
@@ -178,17 +188,6 @@
             this.lblLoggedIn.Size = new System.Drawing.Size(73, 13);
             this.lblLoggedIn.TabIndex = 0;
             this.lblLoggedIn.Text = "Not logged in.";
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.Enabled = false;
-            this.btnLogout.Location = new System.Drawing.Point(197, 15);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(75, 23);
-            this.btnLogout.TabIndex = 1;
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // Form1
             // 

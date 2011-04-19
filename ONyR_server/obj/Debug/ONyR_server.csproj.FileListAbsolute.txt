@@ -1,5 +1,0 @@
-D:\projects\cs\szakdoga\ONyR\ONyR_server\bin\ONyR_server.dll
-D:\projects\cs\szakdoga\ONyR\ONyR_server\bin\ONyR_server.pdb
-D:\projects\cs\szakdoga\ONyR\ONyR_server\obj\Debug\ResolveAssemblyReference.cache
-D:\projects\cs\szakdoga\ONyR\ONyR_server\obj\Debug\ONyR_server.dll
-D:\projects\cs\szakdoga\ONyR\ONyR_server\obj\Debug\ONyR_server.pdb

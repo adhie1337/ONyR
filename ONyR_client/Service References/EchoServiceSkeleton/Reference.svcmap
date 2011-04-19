@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="8a33c624-c36c-4311-abf7-6ad6d81d5bbb" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:58628/ONyRServiceSite/EchoService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EchoService.wsdl" MetadataType="Wsdl" ID="9a37d07b-d6da-4b29-a22f-48ba8d4ddc72" SourceId="1" SourceUrl="http://localhost:58628/ONyRServiceSite/EchoService.svc?wsdl" />
+    <MetadataFile FileName="EchoService.xsd" MetadataType="Schema" ID="c075b26f-c74d-44e8-9271-bf8286bfb7e5" SourceId="1" SourceUrl="http://localhost:58628/ONyRServiceSite/EchoService.svc?xsd=xsd1" />
+    <MetadataFile FileName="EchoService1.xsd" MetadataType="Schema" ID="a31f2cbc-8420-4739-8c00-1b8b21d34f88" SourceId="1" SourceUrl="http://localhost:58628/ONyRServiceSite/EchoService.svc?xsd=xsd0" />
+    <MetadataFile FileName="EchoService.disco" MetadataType="Disco" ID="994b46b0-6f53-489a-8f3f-d8bcc18d6561" SourceId="1" SourceUrl="http://localhost:58628/ONyRServiceSite/EchoService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
