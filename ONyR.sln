@@ -27,6 +27,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ONyRServiceSite", "ONyRServ
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ONyRDataHandlerClassesGenerator", "ONyRDataHandlerClassesGenerator\ONyRDataHandlerClassesGenerator.csproj", "{8A4D4662-54E6-4EC1-A929-8BA91B32050B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,16 @@ Global
 		{0F49FE4B-7AE5-4C94-9BD3-AE2C5D321BB8}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{0F49FE4B-7AE5-4C94-9BD3-AE2C5D321BB8}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{0F49FE4B-7AE5-4C94-9BD3-AE2C5D321BB8}.Release|x86.ActiveCfg = Debug|Any CPU
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Debug|x86.ActiveCfg = Debug|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Debug|x86.Build.0 = Debug|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Release|Any CPU.ActiveCfg = Release|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Release|x86.ActiveCfg = Release|x86
+		{8A4D4662-54E6-4EC1-A929-8BA91B32050B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

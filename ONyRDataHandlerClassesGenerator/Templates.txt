@@ -1,0 +1,92 @@
+﻿//@templatename:Data Contract Interface
+//@filename:I<<EntityType>>Service.cs
+//@folder:ONyRServiceSite\App_Code\Interfaces
+using tem;
+using tem.Collections.Generic;
+using tem.Linq;
+using tem.Runtime.Serialization;
+using tem.ServiceModel;
+using tem.Text;
+
+public enum <<EntityType>>Filter
+{
+    ById = 0, ByIds, All
+};
+
+[ServiceContract]
+public interface I<<EntityType>>Service
+{
+    [OperationContract]
+    List<<<EntityName>>VO> Load<<EntityTypePlural>>(<<EntityType>>Filter pFilter, int pId = -1, int[] pIds = null);
+}
+
+[DataContract]
+public class <<EntityType>>VO
+{
+    [DataMember]
+    public int ID;
+
+    public <<EntityType>>VO(int pId)
+    {
+		ID = pId;
+    }
+}
+//@templatename:Data Contract Interface
+//@filename:<<EntityType>>Service.cs
+//@folder:ONyRServiceSite\App_Code
+using tem;
+using tem.Collections.Generic;
+using tem.Linq;
+using tem.ServiceModel;
+using tem.ServiceModel.Activation;
+using tem.Text;
+using tem.Net;
+using tem.Web;
+using tem.Web.ApplicationServices;
+using ONyRDataSetTableAdapters;
+
+[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
+public class <<EntityType>>Service : I<<EntityType>>Service
+{
+    public List<<<EntityType>>VO> Load<<EntityTypePlural>>(<<EntityType>>Filter pFilter, int pId = -1, int[] pIds = null)
+    {
+        if (HttpContext.Current.User.Identity.IsAuthenticated == false)
+        {
+            throw new Exception("Authentication needed to use this method");
+        }
+
+        LogTableAdapter logAdapter = new LogTableAdapter();
+        logAdapter.AddEntry("<<EntityType>>Service", "Load<<EntityTypePlural>>", String.Format("Filter:{0}; ID:{1}; IDs: {2}", pFilter, pId, pIds), HttpContext.Current.<<EntityType>>.Identity.Name);
+        logAdapter.Dispose();
+
+        <<EntityType>>TableAdapter adapter = new <<EntityType>>TableAdapter();
+        ONyRDataSet.<<EntityType>>DataTable table;
+        List<<<EntityType>>VO> retVal = new List<<<EntityType>>VO>();
+        
+
+        if (pFilter == <<EntityType>>Filter.All)
+        {
+            table = adapter.GetData();
+
+        }
+        else if (pFilter == <<EntityType>>Filter.ById)
+        {
+            table = adapter.GetDataByID(pId);
+        }
+        else if (pFilter == <<EntityType>>Filter.ByIds)
+        {
+            table = adapter.GetData();
+        }
+        else
+        {
+            throw new NotImplementedException("Illegal use of <<EntityType>>Service!");
+        }
+
+        for (int i = 0; i < table.Count; ++i)
+        {
+            retVal.Add(new <<EntityType>>VO(table[i].ID));
+        }
+
+        return retVal;
+	}
+}

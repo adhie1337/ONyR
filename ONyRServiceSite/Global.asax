@@ -6,6 +6,9 @@
     {
         System.Web.ApplicationServices.AuthenticationService.Authenticating +=
             new EventHandler<System.Web.ApplicationServices.AuthenticatingEventArgs>(AuthenticationService.Authenticating);
+
+        System.Web.ApplicationServices.AuthenticationService.CreatingCookie +=
+            new EventHandler<System.Web.ApplicationServices.CreatingCookieEventArgs>(AuthenticationService.CreationCookie);
     }
     
     void Application_End(object sender, EventArgs e) 

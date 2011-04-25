@@ -1,0 +1,10 @@
+TODOs when creating new table
+
+-new TableAdapter with queries
+-new Service with session checking & log operations
+-new Data, and ServiceContract interfaces
+-client-side Value Objects
+-model
+-controller & notifiers, commands, delegates, responders
+!!!!
+-user interface
