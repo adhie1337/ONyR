@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ONyR_client.control;
-using ONyR_client.control.commands;
-using ONyR_client.control.notifiers;
+using ONyR_client.control.commands.Session;
+using ONyR_client.control.notifiers.Session;
 
 namespace ONyR_client.control
 {

@@ -49,14 +49,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="control\abstractclasses.cs" />
+    <Compile Include="control\business\abstractclasses.cs" />
     <Compile Include="control\business\delegates\UserServiceDelegate.cs" />
     <Compile Include="control\business\responders\UserServiceResponder.cs" />
-    <Compile Include="control\commands\LoadUsersCommand.cs" />
-    <Compile Include="control\commands\LoginUserCommand.cs" />
-    <Compile Include="control\commands\LogoutUserCommand.cs" />
-    <Compile Include="control\notifiers\LogoutUserNotifier.cs" />
-    <Compile Include="control\notifiers\LoadUsersNotifier.cs" />
-    <Compile Include="control\notifiers\LoginUserNotifier.cs" />
+    <Compile Include="control\commands\User\AddUsersCommand.cs" />
+    <Compile Include="control\commands\User\ModifyUsersCommand.cs" />
+    <Compile Include="control\commands\User\RemoveUsersCommand.cs" />
+    <Compile Include="control\commands\User\LoadUsersCommand.cs" />
+    <Compile Include="control\commands\Session\LoginUserCommand.cs" />
+    <Compile Include="control\commands\Session\LogoutUserCommand.cs" />
+    <Compile Include="control\notifiers\User\AddUsersNotifier.cs" />
+    <Compile Include="control\notifiers\User\ModifyUsersNotifier.cs" />
+    <Compile Include="control\notifiers\User\RemoveUsersNotifier.cs" />
+    <Compile Include="control\notifiers\Session\LogoutUserNotifier.cs" />
+    <Compile Include="control\notifiers\User\LoadUsersNotifier.cs" />
+    <Compile Include="control\notifiers\Session\LoginUserNotifier.cs" />
     <Compile Include="control\business\responders\AuthenticationServiceResponder.cs" />
     <Compile Include="control\SessionController.cs" />
     <Compile Include="control\UserController.cs" />

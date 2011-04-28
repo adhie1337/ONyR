@@ -104,12 +104,70 @@ namespace ONyR_client.UserServiceSkeleton {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ONyRFaultException", Namespace="http://schemas.datacontract.org/2004/07/")]
+    [System.SerializableAttribute()]
+    public partial class ONyRFaultException : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ErrorCodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ErrorCode {
+            get {
+                return this.ErrorCodeField;
+            }
+            set {
+                if ((this.ErrorCodeField.Equals(value) != true)) {
+                    this.ErrorCodeField = value;
+                    this.RaisePropertyChanged("ErrorCode");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserServiceSkeleton.IUserService")]
     public interface IUserService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LoadUsers", ReplyAction="http://tempuri.org/IUserService/LoadUsersResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(ONyR_client.UserServiceSkeleton.ONyRFaultException), Action="http://tempuri.org/IUserService/LoadUsersONyRFaultExceptionFault", Name="ONyRFaultException", Namespace="http://schemas.datacontract.org/2004/07/")]
         ONyR_client.UserServiceSkeleton.UserVO[] LoadUsers(ONyR_client.UserServiceSkeleton.UserFilter pFilter, int pId, int[] pIds);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/AddUsers", ReplyAction="http://tempuri.org/IUserService/AddUsersResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(ONyR_client.UserServiceSkeleton.ONyRFaultException), Action="http://tempuri.org/IUserService/AddUsersONyRFaultExceptionFault", Name="ONyRFaultException", Namespace="http://schemas.datacontract.org/2004/07/")]
+        void AddUsers(ONyR_client.UserServiceSkeleton.UserVO[] pUsers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RemoveUsers", ReplyAction="http://tempuri.org/IUserService/RemoveUsersResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(ONyR_client.UserServiceSkeleton.ONyRFaultException), Action="http://tempuri.org/IUserService/RemoveUsersONyRFaultExceptionFault", Name="ONyRFaultException", Namespace="http://schemas.datacontract.org/2004/07/")]
+        void RemoveUsers(ONyR_client.UserServiceSkeleton.UserVO[] pUsers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/ModifyUsers", ReplyAction="http://tempuri.org/IUserService/ModifyUsersResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(ONyR_client.UserServiceSkeleton.ONyRFaultException), Action="http://tempuri.org/IUserService/ModifyUsersONyRFaultExceptionFault", Name="ONyRFaultException", Namespace="http://schemas.datacontract.org/2004/07/")]
+        void ModifyUsers(ONyR_client.UserServiceSkeleton.UserVO[] pOriginalUsers, ONyR_client.UserServiceSkeleton.UserVO[] pNewUsers, bool isForced);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -141,6 +199,18 @@ namespace ONyR_client.UserServiceSkeleton {
         
         public ONyR_client.UserServiceSkeleton.UserVO[] LoadUsers(ONyR_client.UserServiceSkeleton.UserFilter pFilter, int pId, int[] pIds) {
             return base.Channel.LoadUsers(pFilter, pId, pIds);
+        }
+        
+        public void AddUsers(ONyR_client.UserServiceSkeleton.UserVO[] pUsers) {
+            base.Channel.AddUsers(pUsers);
+        }
+        
+        public void RemoveUsers(ONyR_client.UserServiceSkeleton.UserVO[] pUsers) {
+            base.Channel.RemoveUsers(pUsers);
+        }
+        
+        public void ModifyUsers(ONyR_client.UserServiceSkeleton.UserVO[] pOriginalUsers, ONyR_client.UserServiceSkeleton.UserVO[] pNewUsers, bool isForced) {
+            base.Channel.ModifyUsers(pOriginalUsers, pNewUsers, isForced);
         }
     }
 }

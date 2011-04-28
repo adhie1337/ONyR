@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ONyR_client.model.vo;
 using ONyR_client.control;
-using ONyR_client.control.notifiers;
+using ONyR_client.control.notifiers.User;
 
 namespace ONyR_client.model.models
 {

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
 public enum UserFilter
 {
@@ -14,7 +11,20 @@ public enum UserFilter
 public interface IUserService
 {
     [OperationContract]
+    [FaultContractAttribute(typeof(ONyRFaultException))]
     List<UserVO> LoadUsers(UserFilter pFilter, int pId = -1, int[] pIds = null);
+
+    [OperationContract]
+    [FaultContractAttribute(typeof(ONyRFaultException))]
+    void AddUsers(UserVO[] pUsers);
+
+    [OperationContract]
+    [FaultContractAttribute(typeof(ONyRFaultException))]
+    void RemoveUsers(UserVO[] pUsers);
+
+    [OperationContract]
+    [FaultContractAttribute(typeof(ONyRFaultException))]
+    void ModifyUsers(UserVO[] pOriginalUsers, UserVO[] pNewUsers, bool isForced = false);
 }
 
 [DataContract]
@@ -34,5 +44,42 @@ public class UserVO
         ID = pId;
         UserName = pUserName;
         Name = pName;
+    }
+}
+
+[DataContract]
+public partial class ONyRFaultException : object, System.Runtime.Serialization.IExtensibleDataObject
+{
+    private int mErrorCode;
+    private ExtensionDataObject mExtensionDataObject;
+
+    public ONyRFaultException(ErrorCode pErrorCode)
+    {
+        mErrorCode = (int)pErrorCode;
+    }
+
+    [DataMember]
+    public int ErrorCode
+    {
+        get
+        {
+            return mErrorCode;
+        }
+        set
+        {
+            mErrorCode = value;
+        }
+    }
+
+    public ExtensionDataObject ExtensionData
+    {
+        get
+        {
+            return mExtensionDataObject;
+        }
+        set
+        {
+            mExtensionDataObject = value;
+        }
     }
 }

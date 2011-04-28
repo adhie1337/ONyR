@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ONyR_client.control;
-using ONyR_client.control.notifiers;
-using ONyR_client.control.commands;
+﻿using ONyR_client.control.notifiers.User;
+using ONyR_client.control.commands.User;
 
 namespace ONyR_client.control
 {
@@ -13,6 +8,9 @@ namespace ONyR_client.control
         override protected void Initialize()
         {
             addConnection(typeof(LoadUsersNotifier), typeof(LoadUsersCommand));
+            addConnection(typeof(AddUsersNotifier), typeof(AddUsersCommand));
+            addConnection(typeof(ModifyUsersNotifier), typeof(ModifyUsersCommand));
+            addConnection(typeof(RemoveUsersNotifier), typeof(RemoveUsersCommand));
         }
     }
 }

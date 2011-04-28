@@ -11,34 +11,53 @@ using ONyR_client.control.business.responders;
 
 namespace ONyR_client.control.business.delegates
 {
-    class AuthenticationServiceDeleage
+    class AuthenticationServiceDeleage : Delegate<AuthenticationServiceResponder>
     {
-        public static void Login(string username, string password)
+        public AuthenticationServiceDeleage(Notifier pInitiator, AuthenticationServiceResponder pResponder)
+            : base(pInitiator, pResponder)
+        {
+            pResponder.Initiator = pInitiator;
+        }
+
+        public void Login(string username, string password)
         {
             bool retVal = false;
 
             AuthenticationServiceClient client = new AuthenticationServiceClient();
             OperationContextScope scope = new OperationContextScope(client.InnerChannel);
 
-            retVal = client.Login(username, password, null, false);
+            try{
 
-            if (retVal)
-            {
+            retVal = client.Login(username, password, null, false);
                 MessageProperties props = OperationContext.Current.IncomingMessageProperties;
                 HttpResponseMessageProperty prop = props[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
                 string rawCookies = prop.Headers[HttpResponseHeader.SetCookie];
 
-                AuthenticationServiceResponder.LoginResult(FormatCookie(rawCookies));
+                mResponder.LoginResult(FormatCookie(rawCookies));
             }
-            else
+            catch(Exception ex)
             {
-                AuthenticationServiceResponder.LoginFault();
+                int code;
+                ErrorCode errorCode = ErrorCode.NonONyRError;
+
+                try
+                {
+                    code = System.Convert.ToInt32(ex.Message);
+                    errorCode = (ErrorCode)code;
+                }
+                catch (Exception)
+                {
+                    // If it was not our Exception, we handle an "Unknown Exception".
+                    errorCode = ErrorCode.NonONyRError;
+                }
+
+                mResponder.LoginFault(errorCode);
             }
 
             client.Close();
         }
 
-        public static void Logout()
+        public void Logout()
         {
             AuthenticationServiceClient client = new AuthenticationServiceClient();
             OperationContextScope scope = new OperationContextScope(client.InnerChannel);
@@ -49,11 +68,25 @@ namespace ONyR_client.control.business.delegates
             try
             {
                 client.Logout();
-                AuthenticationServiceResponder.LogoutResult();
+                mResponder.LogoutResult();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                AuthenticationServiceResponder.LogoutFault();
+                int code;
+                ErrorCode errorCode = ErrorCode.NonONyRError;
+
+                try
+                {
+                    code = System.Convert.ToInt32(ex.Message);
+                    errorCode = (ErrorCode)code;
+                }
+                catch (Exception)
+                {
+                    // If it was not our Exception, we handle an "Unknown Exception".
+                    errorCode = ErrorCode.NonONyRError;
+                }
+
+                mResponder.LogoutFault(errorCode);
             }
             finally
             {

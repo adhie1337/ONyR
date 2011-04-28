@@ -3,8 +3,8 @@
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:58628/ONyRServiceSite/UserService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:58628/ONyRServiceSite/UserService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:58628/ONyRServiceSite/UserService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/" />
+      <xsd:import schemaLocation="http://localhost:58628/ONyRServiceSite/UserService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:58628/ONyRServiceSite/UserService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
     </xsd:schema>
   </wsdl:types>
@@ -14,10 +14,56 @@
   <wsdl:message name="IUserService_LoadUsers_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadUsersResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserService_LoadUsers_ONyRFaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/" name="detail" element="q1:ONyRFaultException" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AddUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddUsers" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AddUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AddUsers_ONyRFaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/" name="detail" element="q2:ONyRFaultException" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveUsers" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveUsers_ONyRFaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/" name="detail" element="q3:ONyRFaultException" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ModifyUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:ModifyUsers" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ModifyUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ModifyUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ModifyUsers_ONyRFaultExceptionFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/" name="detail" element="q4:ONyRFaultException" />
+  </wsdl:message>
   <wsdl:portType name="IUserService">
     <wsdl:operation name="LoadUsers">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LoadUsers" message="tns:IUserService_LoadUsers_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LoadUsersResponse" message="tns:IUserService_LoadUsers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IUserService/LoadUsersONyRFaultExceptionFault" name="ONyRFaultExceptionFault" message="tns:IUserService_LoadUsers_ONyRFaultExceptionFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/AddUsers" message="tns:IUserService_AddUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/AddUsersResponse" message="tns:IUserService_AddUsers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IUserService/AddUsersONyRFaultExceptionFault" name="ONyRFaultExceptionFault" message="tns:IUserService_AddUsers_ONyRFaultExceptionFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/RemoveUsers" message="tns:IUserService_RemoveUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/RemoveUsersResponse" message="tns:IUserService_RemoveUsers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IUserService/RemoveUsersONyRFaultExceptionFault" name="ONyRFaultExceptionFault" message="tns:IUserService_RemoveUsers_ONyRFaultExceptionFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ModifyUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ModifyUsers" message="tns:IUserService_ModifyUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ModifyUsersResponse" message="tns:IUserService_ModifyUsers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IUserService/ModifyUsersONyRFaultExceptionFault" name="ONyRFaultExceptionFault" message="tns:IUserService_ModifyUsers_ONyRFaultExceptionFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IUserService" type="tns:IUserService">
@@ -30,6 +76,45 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="ONyRFaultExceptionFault">
+        <soap:fault use="literal" name="ONyRFaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AddUsers">
+      <soap:operation soapAction="http://tempuri.org/IUserService/AddUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ONyRFaultExceptionFault">
+        <soap:fault use="literal" name="ONyRFaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveUsers">
+      <soap:operation soapAction="http://tempuri.org/IUserService/RemoveUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ONyRFaultExceptionFault">
+        <soap:fault use="literal" name="ONyRFaultExceptionFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ModifyUsers">
+      <soap:operation soapAction="http://tempuri.org/IUserService/ModifyUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="ONyRFaultExceptionFault">
+        <soap:fault use="literal" name="ONyRFaultExceptionFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="UserService">

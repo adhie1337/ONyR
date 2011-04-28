@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ONyR_client.model.models;
+﻿using ONyR_client.model;
 using ONyR_client.model.vo;
-using ONyR_client.model;
 
 namespace ONyR_client.control.business.responders
 {
-    class UserServiceResponder
+    class UserServiceResponder : Responder
     {
-        public static void LoadUsersResult(UserVO[] pLoadedUsers)
+        public void LoadUsersResult(UserVO[] pLoadedUsers)
         {
             ModelLocator locator = ModelLocator.getInstance();
 
@@ -25,9 +20,47 @@ namespace ONyR_client.control.business.responders
             locator.UserModel.AddUsers(pLoadedUsers);
         }
 
-        public static void LoadUsersFault()
+        public void LoadUsersFault(ErrorCode pCode)
         {
+            ApplicationFaultManager.Fault(pCode, Initiator);
+        }
 
+        public void AddUsersResult(UserVO[] pAddedUsers)
+        {
+            ModelLocator.getInstance().UserModel.AddUsers(pAddedUsers);
+        }
+
+        public void AddUsersFault(ErrorCode pCode)
+        {
+            ApplicationFaultManager.Fault(pCode, Initiator);
+        }
+
+        public void RemoveUsersResult(UserVO[] pRemovedUsers)
+        {
+            ModelLocator locator = ModelLocator.getInstance();
+            int[] ids = new int[pRemovedUsers.Length];
+
+            for (int i = 0; i < pRemovedUsers.Length; ++i)
+            {
+                ids[i] = pRemovedUsers[i].ID;
+            }
+
+            locator.UserModel.RemoveUsersByIDs(ids);
+        }
+
+        public void RemoveUsersFault(ErrorCode pCode)
+        {
+            ApplicationFaultManager.Fault(pCode, Initiator);
+        }
+
+        public void ModifyUsersResult(UserVO[] pNewUsers)
+        {
+            ModelLocator.getInstance().UserModel.ModifyUsers(pNewUsers);
+        }
+
+        public void ModifyUsersFault(ErrorCode pCode)
+        {
+            ApplicationFaultManager.Fault(pCode, Initiator);
         }
 
     }

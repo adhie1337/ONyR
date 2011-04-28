@@ -7,26 +7,27 @@ using ONyR_client.model;
 
 namespace ONyR_client.control.business.responders
 {
-    class AuthenticationServiceResponder
+    class AuthenticationServiceResponder : Responder
     {
-        public static void LoginResult(string cookie)
+        public void LoginResult(string cookie)
         {
             ModelLocator.getInstance().SessionModel.SetSessionCookie(cookie);
         }
 
-        public static void LoginFault()
+        public void LoginFault(ErrorCode pCode)
+        {
+            ModelLocator.getInstance().SessionModel.Logout();
+            ApplicationFaultManager.Fault(pCode, Initiator);
+        }
+
+        public void LogoutResult()
         {
             ModelLocator.getInstance().SessionModel.Logout();
         }
 
-        public static void LogoutResult()
+        public void LogoutFault(ErrorCode pCode)
         {
-            ModelLocator.getInstance().SessionModel.Logout();
-        }
-
-        public static void LogoutFault()
-        {
-
+            ApplicationFaultManager.Fault(pCode, Initiator);
         }
     }
 }

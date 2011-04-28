@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ONyR_client.model;
 using ONyR_client.model.models;
-using ONyR_client.control.notifiers;
+using ONyR_client.control.notifiers.Session;
 
 namespace ONyR_client.view
 {
@@ -80,11 +80,6 @@ namespace ONyR_client.view
                 lblConnectionState.Text = "Nincs kapcsolat.";
                 miLogin.Enabled = true;
                 miLogout.Enabled = false;
-
-                if (lfLogin != null)
-                {
-                    MessageBox.Show("Helytelen felhasználónév, vagy jelszó!", "Hiba");
-                }
             }
         }
 

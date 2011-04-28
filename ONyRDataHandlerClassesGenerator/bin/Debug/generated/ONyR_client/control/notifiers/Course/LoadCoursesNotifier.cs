@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ONyR_client.control.notifiers
+namespace ONyR_client.control.notifiers.Course
 {
-    class LoadUsersNotifier : Notifier
+    class LoadCoursesNotifier : Notifier
     {
-        public enum UserFilter
+        public enum CourseFilter
         {
             ById=0, ByIds, All
         };
 
-        public LoadUsersNotifier(UserFilter pFilter, int pId = -1, int[] pIds = null)
+        public LoadCoursesNotifier(CourseFilter pFilter, int pId = -1, int[] pIds = null)
         {
             mfeFilter = pFilter;
             miId = pId;
             maIds = pIds;
         }
 
-        private UserFilter mfeFilter;
+        private CourseFilter mfeFilter;
         private int miId;
         private int[] maIds;
 
-        public UserFilter Filter
+        public CourseFilter Filter
         {
             get
             {
@@ -35,7 +30,7 @@ namespace ONyR_client.control.notifiers
         {
             get
             {
-                if (mfeFilter == UserFilter.ById)
+                if (mfeFilter == CourseFilter.ById)
                 {
                     return miId;
                 }
@@ -48,7 +43,7 @@ namespace ONyR_client.control.notifiers
         {
             get
             {
-                if (mfeFilter == UserFilter.ByIds)
+                if (mfeFilter == CourseFilter.ByIds)
                 {
                     return maIds;
                 }

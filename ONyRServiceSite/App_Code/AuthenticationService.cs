@@ -14,9 +14,7 @@ public class AuthenticationService
         retVal = userAdapter.CheckUser(userName, passWord) != 0;
         userAdapter.Dispose();
 
-        LogTableAdapter logAdapter = new LogTableAdapter();
-        logAdapter.AddEntry("AuthenticationService", "authenticate", String.Format("username:{0}; result:{1}", userName, retVal), userName);
-        logAdapter.Dispose();
+        LogService.Log("AuthenticationService", "authenticate", String.Format("username:{0}; result:{1}", userName, retVal));
 
         return retVal;
     }
@@ -39,7 +37,7 @@ public class AuthenticationService
 
         if(users.Count == 0)
         {
-            throw new Exception("Authentication error, no matching user!");
+            throw new ONyRException(ErrorCode.InvalidCredentialsError);
         }
 
         ONyRDataSet.SysUserRow user = users[0];
@@ -62,4 +60,34 @@ public class AuthenticationService
         HttpContext.Current.Response.Cookies.Add(new HttpCookie("SessionId", session.ID.ToString()));
     }
 
+    public static void CheckIfUSerIsAuthenticated()
+    {
+        ONyRDataSet.SysSessionDataTable sessions;
+
+        if (HttpContext.Current.User.Identity.IsAuthenticated == false)
+        {
+            throw new ONyRException(ErrorCode.NoSessionError);
+        }
+
+        bool validSession = false;
+        SysSessionTableAdapter sessionAdapter = new SysSessionTableAdapter();
+        sessions = sessionAdapter.GetDataByUserID(Convert.ToInt32(HttpContext.Current.Request.Cookies["UserId"]));
+
+        foreach (ONyRDataSet.SysSessionRow row in sessions)
+        {
+            if (row.SessionModified.AddMinutes(30).CompareTo(DateTime.Now) > 0)
+            {
+                validSession = true;
+            }
+            else
+            {
+                sessionAdapter.Delete(row.ID);
+            }
+        }
+
+        if (!validSession)
+        {
+            throw new ONyRException(ErrorCode.InvalidSessionError);
+        }
+    }
 }

@@ -1,0 +1,6 @@
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\bin\Debug\ONyRDataHandlerClassesGenerator.exe
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\bin\Debug\ONyRDataHandlerClassesGenerator.pdb
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\obj\x86\Debug\ONyRDataHandlerClassesGenerator.exe
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\obj\x86\Debug\ONyRDataHandlerClassesGenerator.pdb
+D:\projects\cs\szakdoga\ONyR\ONyRDataHandlerClassesGenerator\bin\Debug\Templates.txt

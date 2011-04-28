@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ONyR_client.control;
 
-namespace ONyR_client.control.notifiers
+namespace ONyR_client.control.notifiers.Session
 {
     class LoginUserNotifier : Notifier
     {
@@ -31,6 +31,11 @@ namespace ONyR_client.control.notifiers
             {
                 return mPassword;
             }
+        }
+
+        override public object Clone()
+        {
+            return new LoginUserNotifier(mUserName, mPassword);
         }
     }
 }

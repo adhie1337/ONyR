@@ -162,8 +162,10 @@ namespace ONyR_client.control
     /// <summary>
     /// The notifier class.
     /// </summary>
-    public class Notifier : EventArgs
+    public abstract class Notifier : EventArgs, ICloneable
     {
+        public bool isForced = false;
+
         /// <summary>
         /// Holds the front controllers for each notifier type.
         /// </summary>
@@ -216,6 +218,17 @@ namespace ONyR_client.control
             }
 
             conntection.OnNotify(this);
+        }
+
+        #region ICloneable Members
+
+        public abstract object Clone();
+
+        #endregion
+
+        public Notifier getClone()
+        {
+            return (Notifier)Clone();
         }
     }
 }

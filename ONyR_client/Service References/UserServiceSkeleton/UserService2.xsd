@@ -22,4 +22,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserVO" nillable="true" type="tns:UserVO" />
+  <xs:complexType name="ONyRFaultException">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ErrorCode" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ONyRFaultException" nillable="true" type="tns:ONyRFaultException" />
 </xs:schema>

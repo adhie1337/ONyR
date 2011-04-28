@@ -1,10 +1,19 @@
 TODOs when creating new table
 
--new TableAdapter with queries
--new Service with session checking & log operations
--new Data, and ServiceContract interfaces
--client-side Value Objects
--model
--controller & notifiers, commands, delegates, responders
-!!!!
--user interface
+Can be generated:													Template Done:
+-new Service with session checking & log operations					X
+-ServiceContract interfaces											X
+-model																X
+-controller:														X
+	-controller class:												X
+	-notifiers														X
+	-commands														X
+	-delegates														X
+	-responders														X
+-client-side Value Objects (generating skeleton)					X
+-new DataContract calsses (generating skeleton)						X
+
+Cannot be generated:
+-the table itself													N/A
+-new TableAdapter with queries										N/A
+-user interface														N/A
