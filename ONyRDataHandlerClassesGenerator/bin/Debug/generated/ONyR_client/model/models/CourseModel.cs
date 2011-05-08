@@ -4,21 +4,21 @@ using ONyR_client.model.vo;
 
 namespace ONyR_client.model.models
 {
-    class CourseModel : Model
+    public class CourseModel : Model
     {
+
+        #region Members
+
+        private Dictionary<int, CourseVO> mCourses;
+
+        #endregion
 
         #region Constructor
 
         public CourseModel()
         {
-            mCourses = new List<CourseVO>();
+            mCourses = new Dictionary<int, CourseVO>();
         }
-
-        #endregion
-
-        #region Properties
-
-        private List<CourseVO> mCourses;
 
         #endregion
 
@@ -26,42 +26,38 @@ namespace ONyR_client.model.models
 
         public CourseVO GetCourseByID(int pID)
         {
-            for (int i = 0; i < mCourses.Count; ++i)
-            {
-                if (mCourses[i].ID == pID)
-                {
-                    return mCourses[i].Clone();
-                }
-            }
-
-            return null;
+            return mCourses[pID].Clone();
         }
 
         public List<CourseVO> GetCoursesByIDs(int[] pIDs)
         {
-            List<CourseVO> retVal = new List<CourseVO>();
+            List<CourseVO> result = new List<CourseVO>();
 
-            for (int i = 0; i < mCourses.Count; ++i)
+            int[] keys = mCourses.Keys.ToArray();
+
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(mCourses[i].ID))
+                if (keys.Contains(pIDs[i]))
                 {
-                    retVal.Add(mCourses[i].Clone());
+                    result.Add(mCourses[pIDs[i]].Clone());
                 }
             }
 
-            return retVal;
+            return result;
         }
 
         public List<CourseVO> GetAllCourses()
         {
-            List<CourseVO> retVal = new List<CourseVO>();
+            List<CourseVO> result = new List<CourseVO>();
 
-            for (int i = 0; i < mCourses.Count; ++i)
+            int[] keys = mCourses.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
             {
-                retVal.Add(mCourses[i].Clone());
+                result.Add(mCourses[keys[i]].Clone());
             }
 
-            return retVal;
+            return result;
         }
 
         #endregion
@@ -70,76 +66,54 @@ namespace ONyR_client.model.models
 
         public void AddCourse(CourseVO pCourse)
         {
-            mCourses.Add(pCourse);
+            mCourses[pCourse.ID] = pCourse;
             update();
         }
 
         public void AddCourses(CourseVO[] pCourses)
         {
-            mCourses.AddRange(pCourses);
+            foreach (CourseVO vo in pCourses)
+            {
+                mCourses[vo.ID] = vo.Clone();
+            }
+
             update();
         }
 
         public void RemoveCourseByID(int pID)
         {
-            for (int i = 0; i < mCourses.Count; ++i)
-            {
-                if (mCourses[i].ID == pID)
-                {
-                    mCourses.RemoveAt(i);
-                    update();
-                    break;
-                }
-            }
+            mCourses.Remove(pID);
         }
 
         public void RemoveCoursesByIDs(int[] pIDs)
         {
-            for (int i = 0; i < mCourses.Count; ++i)
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(mCourses[i].ID))
-                {
-                    mCourses.RemoveAt(i);
-                    --i;
-                }
+                mCourses.Remove(pIDs[i]);
             }
             update();
         }
 
         public void ModifyCourse(CourseVO pCourse)
         {
-            for (int i = 0; i < mCourses.Count; ++i)
-            {
-                if (mCourses[i].ID == pCourse.ID)
-                {
-                    mCourses.RemoveAt(i);
-                    break;
-                }
-            }
-
-            mCourses.Add(pCourse);
-            update();
+            AddCourse(pCourse);
         }
 
         public void ModifyCourses(CourseVO[] pCourses)
         {
-            for (int i = 0; i < mCourses.Count; ++i)
-            {
-                if (pCourses.Contains(mCourses[i]))
-                {
-                    mCourses.RemoveAt(i);
-                    --i;
-                }
-            }
-
-            mCourses.AddRange(pCourses);
-            update();
+            AddCourses(pCourses);
         }
 
 
         public void Empty()
         {
-            mCourses.RemoveRange(0, mCourses.Count);
+            int[] keys = mCourses.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
+            {
+                mCourses.Remove(keys[i]);
+            }
+
             update();
         }
 

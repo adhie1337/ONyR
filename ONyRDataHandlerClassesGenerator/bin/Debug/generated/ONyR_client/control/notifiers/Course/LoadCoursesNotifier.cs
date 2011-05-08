@@ -1,28 +1,30 @@
 namespace ONyR_client.control.notifiers.Course
 {
+    public enum CourseFilter
+    {
+		// TODO: Change this
+        ById=0, ByIds, All
+    }
+
     class LoadCoursesNotifier : Notifier
     {
-        public enum CourseFilter
-        {
-            ById=0, ByIds, All
-        };
 
         public LoadCoursesNotifier(CourseFilter pFilter, int pId = -1, int[] pIds = null)
         {
-            mfeFilter = pFilter;
-            miId = pId;
-            maIds = pIds;
+            mFilter = pFilter;
+            mId = pId;
+            mIds = pIds;
         }
 
-        private CourseFilter mfeFilter;
-        private int miId;
-        private int[] maIds;
+        private CourseFilter mFilter;
+        private int mId;
+        private int[] mIds;
 
         public CourseFilter Filter
         {
             get
             {
-                return mfeFilter;
+                return mFilter;
             }
         }
 
@@ -30,9 +32,9 @@ namespace ONyR_client.control.notifiers.Course
         {
             get
             {
-                if (mfeFilter == CourseFilter.ById)
+                if (mFilter == CourseFilter.ById)
                 {
-                    return miId;
+                    return mId;
                 }
 
                 return -1;
@@ -43,13 +45,19 @@ namespace ONyR_client.control.notifiers.Course
         {
             get
             {
-                if (mfeFilter == CourseFilter.ByIds)
+                if (mFilter == CourseFilter.ByIds)
                 {
-                    return maIds;
+                    return mIds;
                 }
 
                 return null;
             }
+        }
+
+
+        override public object Clone()
+        {
+            return new LoadCoursesNotifier(mFilter, mId, mIds);
         }
     }
 }

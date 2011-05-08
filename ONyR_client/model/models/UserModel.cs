@@ -1,24 +1,24 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using ONyR_client.model.vo;
 
 namespace ONyR_client.model.models
 {
-    class UserModel : Model
+    public class UserModel : Model
     {
+
+        #region Members
+
+        private Dictionary<int, UserVO> mUser;
+
+        #endregion
 
         #region Constructor
 
         public UserModel()
         {
-            mUsers = new List<UserVO>();
+            mUser = new Dictionary<int, UserVO>();
         }
-
-        #endregion
-
-        #region Properties
-
-        private List<UserVO> mUsers;
 
         #endregion
 
@@ -26,42 +26,38 @@ namespace ONyR_client.model.models
 
         public UserVO GetUserByID(int pID)
         {
-            for (int i = 0; i < mUsers.Count; ++i)
-            {
-                if (mUsers[i].ID == pID)
-                {
-                    return mUsers[i].Clone();
-                }
-            }
-
-            return null;
+            return mUser[pID].Clone();
         }
 
         public List<UserVO> GetUsersByIDs(int[] pIDs)
         {
-            List<UserVO> retVal = new List<UserVO>();
+            List<UserVO> result = new List<UserVO>();
 
-            for (int i = 0; i < mUsers.Count; ++i)
+            int[] keys = mUser.Keys.ToArray();
+
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(mUsers[i].ID))
+                if (keys.Contains(pIDs[i]))
                 {
-                    retVal.Add(mUsers[i].Clone());
+                    result.Add(mUser[pIDs[i]].Clone());
                 }
             }
 
-            return retVal;
+            return result;
         }
 
         public List<UserVO> GetAllUsers()
         {
-            List<UserVO> retVal = new List<UserVO>();
+            List<UserVO> result = new List<UserVO>();
 
-            for (int i = 0; i < mUsers.Count; ++i)
+            int[] keys = mUser.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
             {
-                retVal.Add(mUsers[i].Clone());
+                result.Add(mUser[keys[i]].Clone());
             }
 
-            return retVal;
+            return result;
         }
 
         #endregion
@@ -70,76 +66,54 @@ namespace ONyR_client.model.models
 
         public void AddUser(UserVO pUser)
         {
-            mUsers.Add(pUser);
+            mUser[pUser.ID] = pUser;
             update();
         }
 
         public void AddUsers(UserVO[] pUsers)
         {
-            mUsers.AddRange(pUsers);
+            foreach (UserVO vo in pUsers)
+            {
+                mUser[vo.ID] = vo.Clone();
+            }
+
             update();
         }
 
         public void RemoveUserByID(int pID)
         {
-            for (int i = 0; i < mUsers.Count; ++i)
-            {
-                if (mUsers[i].ID == pID)
-                {
-                    mUsers.RemoveAt(i);
-                    update();
-                    break;
-                }
-            }
+            mUser.Remove(pID);
         }
 
         public void RemoveUsersByIDs(int[] pIDs)
         {
-            for (int i = 0; i < mUsers.Count; ++i)
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(mUsers[i].ID))
-                {
-                    mUsers.RemoveAt(i);
-                    --i;
-                }
+                mUser.Remove(pIDs[i]);
             }
             update();
         }
 
         public void ModifyUser(UserVO pUser)
         {
-            for (int i = 0; i < mUsers.Count; ++i)
-            {
-                if (mUsers[i].ID == pUser.ID)
-                {
-                    mUsers.RemoveAt(i);
-                    break;
-                }
-            }
-
-            mUsers.Add(pUser);
-            update();
+            AddUser(pUser);
         }
 
         public void ModifyUsers(UserVO[] pUsers)
         {
-            for (int i = 0; i < mUsers.Count; ++i)
-            {
-                if (pUsers.Contains(mUsers[i]))
-                {
-                    mUsers.RemoveAt(i);
-                    --i;
-                }
-            }
-
-            mUsers.AddRange(pUsers);
-            update();
+            AddUsers(pUsers);
         }
 
 
         public void Empty()
         {
-            mUsers.RemoveRange(0, mUsers.Count);
+            int[] keys = mUser.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
+            {
+                mUser.Remove(keys[i]);
+            }
+
             update();
         }
 

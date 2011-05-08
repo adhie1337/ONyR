@@ -50,50 +50,200 @@
   <ItemGroup>
     <Compile Include="control\abstractclasses.cs" />
     <Compile Include="control\business\abstractclasses.cs" />
+    <Compile Include="control\business\delegates\LogServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\CourseServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\ExamServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\FacultyServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\PostServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\ProgrammeServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\SemesterServiceDelegate.cs" />
+    <Compile Include="control\business\delegates\UniversityServiceDelegate.cs" />
     <Compile Include="control\business\delegates\UserServiceDelegate.cs" />
+    <Compile Include="control\business\responders\LogServiceResponder.cs" />
+    <Compile Include="control\business\responders\CourseServiceResponder.cs" />
+    <Compile Include="control\business\responders\ExamServiceResponder.cs" />
+    <Compile Include="control\business\responders\FacultyServiceResponder.cs" />
+    <Compile Include="control\business\responders\PostServiceResponder.cs" />
+    <Compile Include="control\business\responders\ProgrammeServiceResponder.cs" />
+    <Compile Include="control\business\responders\SemesterServiceResponder.cs" />
+    <Compile Include="control\business\responders\UniversityServiceResponder.cs" />
     <Compile Include="control\business\responders\UserServiceResponder.cs" />
+    <Compile Include="control\commands\Course\AddCoursesCommand.cs" />
+    <Compile Include="control\commands\Course\LoadCoursesCommand.cs" />
+    <Compile Include="control\commands\Course\ModifyCoursesCommand.cs" />
+    <Compile Include="control\commands\Course\RemoveCoursesCommand.cs" />
+    <Compile Include="control\commands\Exam\AddExamsCommand.cs" />
+    <Compile Include="control\commands\Exam\LoadExamsCommand.cs" />
+    <Compile Include="control\commands\Exam\ModifyExamsCommand.cs" />
+    <Compile Include="control\commands\Exam\RemoveExamsCommand.cs" />
+    <Compile Include="control\commands\Faculty\AddFacultiesCommand.cs" />
+    <Compile Include="control\commands\Faculty\LoadFacultiesCommand.cs" />
+    <Compile Include="control\commands\Faculty\ModifyFacultiesCommand.cs" />
+    <Compile Include="control\commands\Faculty\RemoveFacultiesCommand.cs" />
+    <Compile Include="control\commands\Log\LoadErrorLogEntriesCommand.cs" />
+    <Compile Include="control\commands\Log\LoadLogEntriesCommand.cs" />
+    <Compile Include="control\commands\Post\AddPostsCommand.cs" />
+    <Compile Include="control\commands\Post\LoadPostsCommand.cs" />
+    <Compile Include="control\commands\Post\ModifyPostsCommand.cs" />
+    <Compile Include="control\commands\Post\RemovePostsCommand.cs" />
+    <Compile Include="control\commands\Programme\AddProgrammesCommand.cs" />
+    <Compile Include="control\commands\Programme\LoadProgrammesCommand.cs" />
+    <Compile Include="control\commands\Programme\ModifyProgrammesCommand.cs" />
+    <Compile Include="control\commands\Programme\RemoveProgrammesCommand.cs" />
+    <Compile Include="control\commands\Semester\AddSemestersCommand.cs" />
+    <Compile Include="control\commands\Semester\LoadSemestersCommand.cs" />
+    <Compile Include="control\commands\Semester\ModifySemestersCommand.cs" />
+    <Compile Include="control\commands\Semester\RemoveSemestersCommand.cs" />
+    <Compile Include="control\commands\University\AddUniversitiesCommand.cs" />
+    <Compile Include="control\commands\University\LoadUniversitiesCommand.cs" />
+    <Compile Include="control\commands\University\ModifyUniversitiesCommand.cs" />
+    <Compile Include="control\commands\University\RemoveUniversitiesCommand.cs" />
     <Compile Include="control\commands\User\AddUsersCommand.cs" />
+    <Compile Include="control\commands\User\ModifyPasswordCommandCommand.cs" />
     <Compile Include="control\commands\User\ModifyUsersCommand.cs" />
     <Compile Include="control\commands\User\RemoveUsersCommand.cs" />
     <Compile Include="control\commands\User\LoadUsersCommand.cs" />
     <Compile Include="control\commands\Session\LoginUserCommand.cs" />
     <Compile Include="control\commands\Session\LogoutUserCommand.cs" />
+    <Compile Include="control\LogController.cs" />
+    <Compile Include="control\CourseController.cs" />
+    <Compile Include="control\ExamController.cs" />
+    <Compile Include="control\FacultyController.cs" />
+    <Compile Include="control\notifiers\Course\AddCoursesNotifier.cs" />
+    <Compile Include="control\notifiers\Course\LoadCoursesNotifier.cs" />
+    <Compile Include="control\notifiers\Course\ModifyCoursesNotifier.cs" />
+    <Compile Include="control\notifiers\Course\RemoveCoursesNotifier.cs" />
+    <Compile Include="control\notifiers\Exam\AddExamsNotifier.cs" />
+    <Compile Include="control\notifiers\Exam\LoadExamsNotifier.cs" />
+    <Compile Include="control\notifiers\Exam\ModifyExamsNotifier.cs" />
+    <Compile Include="control\notifiers\Exam\RemoveExamsNotifier.cs" />
+    <Compile Include="control\notifiers\Faculty\AddFacultiesNotifier.cs" />
+    <Compile Include="control\notifiers\Faculty\LoadFacultiesNotifier.cs" />
+    <Compile Include="control\notifiers\Faculty\ModifyFacultiesNotifier.cs" />
+    <Compile Include="control\notifiers\Faculty\RemoveFacultiesNotifier.cs" />
+    <Compile Include="control\notifiers\Log\LoadLogEntriesNotifier.cs" />
+    <Compile Include="control\notifiers\Log\LoadErrorLogEntriesNotifier.cs" />
+    <Compile Include="control\notifiers\Post\AddPostsNotifier.cs" />
+    <Compile Include="control\notifiers\Post\LoadPostsNotifier.cs" />
+    <Compile Include="control\notifiers\Post\ModifyPostsNotifier.cs" />
+    <Compile Include="control\notifiers\Post\RemovePostsNotifier.cs" />
+    <Compile Include="control\notifiers\Programme\AddProgrammesNotifier.cs" />
+    <Compile Include="control\notifiers\Programme\LoadProgrammesNotifier.cs" />
+    <Compile Include="control\notifiers\Programme\ModifyProgrammesNotifier.cs" />
+    <Compile Include="control\notifiers\Programme\RemoveProgrammesNotifier.cs" />
+    <Compile Include="control\notifiers\Semester\AddSemestersNotifier.cs" />
+    <Compile Include="control\notifiers\Semester\LoadSemestersNotifier.cs" />
+    <Compile Include="control\notifiers\Semester\ModifySemestersNotifier.cs" />
+    <Compile Include="control\notifiers\Semester\RemoveSemestersNotifier.cs" />
+    <Compile Include="control\notifiers\University\AddUniversitiesNotifier.cs" />
+    <Compile Include="control\notifiers\University\LoadUniversitiesNotifier.cs" />
+    <Compile Include="control\notifiers\University\ModifyUniversitiesNotifier.cs" />
+    <Compile Include="control\notifiers\University\RemoveUniversitiesNotifier.cs" />
     <Compile Include="control\notifiers\User\AddUsersNotifier.cs" />
+    <Compile Include="control\notifiers\User\ModifyPasswordNotifier.cs" />
     <Compile Include="control\notifiers\User\ModifyUsersNotifier.cs" />
     <Compile Include="control\notifiers\User\RemoveUsersNotifier.cs" />
     <Compile Include="control\notifiers\Session\LogoutUserNotifier.cs" />
     <Compile Include="control\notifiers\User\LoadUsersNotifier.cs" />
     <Compile Include="control\notifiers\Session\LoginUserNotifier.cs" />
     <Compile Include="control\business\responders\AuthenticationServiceResponder.cs" />
+    <Compile Include="control\PostController.cs" />
+    <Compile Include="control\ProgrammeController.cs" />
+    <Compile Include="control\SemesterController.cs" />
     <Compile Include="control\SessionController.cs" />
+    <Compile Include="control\UniversityController.cs" />
     <Compile Include="control\UserController.cs" />
     <Compile Include="model\abstractclasses.cs" />
     <Compile Include="model\ModelLocator.cs" />
+    <Compile Include="model\models\LogModel.cs" />
+    <Compile Include="model\models\CourseModel.cs" />
+    <Compile Include="model\models\ExamModel.cs" />
+    <Compile Include="model\models\FacultyModel.cs" />
+    <Compile Include="model\models\PostModel.cs" />
+    <Compile Include="model\models\ProgrammeModel.cs" />
+    <Compile Include="model\models\SemesterModel.cs" />
     <Compile Include="model\models\SessionModel.cs" />
+    <Compile Include="model\models\UniversityModel.cs" />
     <Compile Include="model\models\UserModel.cs" />
+    <Compile Include="model\vo\ErrorLogVO.cs" />
+    <Compile Include="model\vo\LogVO.cs" />
+    <Compile Include="model\vo\CourseVO.cs" />
+    <Compile Include="model\vo\ExamVO.cs" />
+    <Compile Include="model\vo\FacultyVO.cs" />
+    <Compile Include="model\vo\PostVO.cs" />
+    <Compile Include="model\vo\ProgrammeVO.cs" />
+    <Compile Include="model\vo\SemesterVO.cs" />
+    <Compile Include="model\vo\UniversityVO.cs" />
     <Compile Include="model\vo\UserVO.cs" />
     <Compile Include="ONyRClientApplication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\AuthenticationServiceSkeleton\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="control\business\delegates\AuthenticationServiceDelegate.cs" />
-    <Compile Include="Service References\UserServiceSkeleton\Reference.cs">
+    <Compile Include="Service References\AuthenticationServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\CourseServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ExamServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\FacultyServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LogServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PostServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\ProgrammeServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\SemesterServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\UniversityServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\UserServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="utils\UserNameFormatter.cs" />
     <Compile Include="view\Abstractclasses.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="view\CourseViewer.cs">
+    <Compile Include="view\ChangePasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\ChangePasswordForm.Designer.cs">
+      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\CourseEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="view\CourseViewer.Designer.cs">
-      <DependentUpon>CourseViewer.cs</DependentUpon>
+    <Compile Include="view\CourseEditor.Designer.cs">
+      <DependentUpon>CourseEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="view\LoginForm.cs">
       <SubType>Form</SubType>
@@ -101,11 +251,38 @@
     <Compile Include="view\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="view\LogViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="view\LogViewer.Designer.cs">
+      <DependentUpon>LogViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="view\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="view\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\ProgrammeEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="view\ProgrammeEditor.Designer.cs">
+      <DependentUpon>ProgrammeEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\UserEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="view\UserEditor.Designer.cs">
+      <DependentUpon>UserEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\UserEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\UserEditorForm.Designer.cs">
+      <DependentUpon>UserEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="view\VOEditor.cs">
+      <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -116,14 +293,29 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="view\CourseViewer.resx">
-      <DependentUpon>CourseViewer.cs</DependentUpon>
+    <EmbeddedResource Include="view\ChangePasswordForm.resx">
+      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\CourseEditor.resx">
+      <DependentUpon>CourseEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="view\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="view\LogViewer.resx">
+      <DependentUpon>LogViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="view\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\ProgrammeEditor.resx">
+      <DependentUpon>ProgrammeEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\UserEditor.resx">
+      <DependentUpon>UserEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\UserEditorForm.resx">
+      <DependentUpon>UserEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -137,27 +329,155 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\AuthenticationServiceSkeleton\AuthenticationService.wsdl" />
-    <None Include="Service References\AuthenticationServiceSkeleton\AuthenticationService.xsd">
+    <None Include="Service References\AuthenticationServiceReference\AuthenticationService.wsdl" />
+    <None Include="Service References\AuthenticationServiceReference\AuthenticationService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\AuthenticationServiceSkeleton\AuthenticationService1.xsd">
+    <None Include="Service References\AuthenticationServiceReference\AuthenticationService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\UserServiceSkeleton\ONyR_client.UserServiceSkeleton.UserVO.datasource">
+    <None Include="Service References\CourseServiceReference\CourseService.wsdl" />
+    <None Include="Service References\CourseServiceReference\CourseService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CourseServiceReference\CourseService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CourseServiceReference\CourseService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CourseServiceReference\CourseService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\CourseServiceReference\ONyR_client.CourseServiceReference.CourseVO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\UserServiceSkeleton\UserService.wsdl" />
-    <None Include="Service References\UserServiceSkeleton\UserService.xsd">
+    <None Include="Service References\ExamServiceReference\ExamService.wsdl" />
+    <None Include="Service References\ExamServiceReference\ExamService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\UserServiceSkeleton\UserService1.xsd">
+    <None Include="Service References\ExamServiceReference\ExamService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\UserServiceSkeleton\UserService2.xsd">
+    <None Include="Service References\ExamServiceReference\ExamService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\UserServiceSkeleton\UserService3.xsd">
+    <None Include="Service References\ExamServiceReference\ExamService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ExamServiceReference\ONyR_client.ExamServiceReference.ExamVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FacultyServiceReference\FacultyService.wsdl" />
+    <None Include="Service References\FacultyServiceReference\FacultyService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacultyServiceReference\FacultyService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacultyServiceReference\FacultyService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacultyServiceReference\FacultyService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacultyServiceReference\ONyR_client.FacultyServiceReference.FacultyVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LogServiceReference\LogService.wsdl" />
+    <None Include="Service References\LogServiceReference\LogService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LogServiceReference\LogService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LogServiceReference\LogService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LogServiceReference\ONyR_client.LogServiceReference.ErrorLogVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LogServiceReference\ONyR_client.LogServiceReference.LogVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\PostServiceReference\ONyR_client.PostServiceReference.PostVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\PostServiceReference\PostService.wsdl" />
+    <None Include="Service References\PostServiceReference\PostService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PostServiceReference\PostService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PostServiceReference\PostService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PostServiceReference\PostService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProgrammeServiceReference\ONyR_client.ProgrammeServiceReference.ProgrammeVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService.wsdl" />
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SemesterServiceReference\ONyR_client.SemesterServiceReference.SemesterVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SemesterServiceReference\SemesterService.wsdl" />
+    <None Include="Service References\SemesterServiceReference\SemesterService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SemesterServiceReference\SemesterService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SemesterServiceReference\SemesterService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\SemesterServiceReference\SemesterService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UniversityServiceReference\ONyR_client.UniversityServiceReference.UniversityVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UniversityServiceReference\UniversityService.wsdl" />
+    <None Include="Service References\UniversityServiceReference\UniversityService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UniversityServiceReference\UniversityService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UniversityServiceReference\UniversityService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UniversityServiceReference\UniversityService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserServiceReference\ONyR_client.UserServiceReference.UserVO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\UserServiceReference\UserService.wsdl" />
+    <None Include="Service References\UserServiceReference\UserService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserServiceReference\UserService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserServiceReference\UserService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\UserServiceReference\UserService3.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -165,35 +485,163 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\AuthenticationServiceSkeleton\" />
-    <WCFMetadataStorage Include="Service References\UserServiceSkeleton\" />
+    <WCFMetadataStorage Include="Service References\AuthenticationServiceReference\" />
+    <WCFMetadataStorage Include="Service References\CourseServiceReference\" />
+    <WCFMetadataStorage Include="Service References\ExamServiceReference\" />
+    <WCFMetadataStorage Include="Service References\FacultyServiceReference\" />
+    <WCFMetadataStorage Include="Service References\LogServiceReference\" />
+    <WCFMetadataStorage Include="Service References\PostServiceReference\" />
+    <WCFMetadataStorage Include="Service References\ProgrammeServiceReference\" />
+    <WCFMetadataStorage Include="Service References\SemesterServiceReference\" />
+    <WCFMetadataStorage Include="Service References\UniversityServiceReference\" />
+    <WCFMetadataStorage Include="Service References\UserServiceReference\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\AuthenticationServiceSkeleton\AuthenticationService.disco" />
+    <None Include="Service References\AuthenticationServiceReference\AuthenticationService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\AuthenticationServiceSkeleton\configuration91.svcinfo" />
+    <None Include="Service References\AuthenticationServiceReference\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\AuthenticationServiceSkeleton\configuration.svcinfo" />
+    <None Include="Service References\AuthenticationServiceReference\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\AuthenticationServiceSkeleton\Reference.svcmap">
+    <None Include="Service References\AuthenticationServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\UserServiceSkeleton\UserService.disco" />
+    <None Include="Service References\CourseServiceReference\CourseService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\UserServiceSkeleton\configuration91.svcinfo" />
+    <None Include="Service References\CourseServiceReference\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\UserServiceSkeleton\configuration.svcinfo" />
+    <None Include="Service References\CourseServiceReference\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\UserServiceSkeleton\Reference.svcmap">
+    <None Include="Service References\CourseServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ExamServiceReference\ExamService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ExamServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ExamServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ExamServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacultyServiceReference\FacultyService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacultyServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacultyServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacultyServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PostServiceReference\PostService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PostServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PostServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PostServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UniversityServiceReference\UniversityService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UniversityServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UniversityServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UniversityServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserServiceReference\UserService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\UserServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProgrammeServiceReference\ProgrammeService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProgrammeServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProgrammeServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ProgrammeServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SemesterServiceReference\SemesterService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SemesterServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SemesterServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SemesterServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LogServiceReference\LogService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LogServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LogServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LogServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

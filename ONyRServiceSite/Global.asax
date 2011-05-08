@@ -21,6 +21,7 @@
 
     void Session_Start(object sender, EventArgs e)
     {
+        Session.Timeout = 60;
     }
 
     void Session_End(object sender, EventArgs e)

@@ -1,5 +1,6 @@
-using ONyR_client.control.notifiers.Course;
 using ONyR_client.control.business.delegates;
+using ONyR_client.control.business.responders;
+using ONyR_client.control.notifiers.Course;
 
 namespace ONyR_client.control.commands.Course
 {
@@ -7,7 +8,10 @@ namespace ONyR_client.control.commands.Course
     {
         override protected void execute(LoadCoursesNotifier pLoadCoursesNotifier)
         {
-            CourseServiceDelegate.LoadCourses((CourseServiceSkeleton.CourseFilter)pLoadCoursesNotifier.Filter, pLoadCoursesNotifier.Id, pLoadCoursesNotifier.Ids);
+            new CourseServiceDelegate(
+                pLoadCoursesNotifier,
+                new CourseServiceResponder()
+            ).LoadCourses((CourseServiceReference.CourseFilter)pLoadCoursesNotifier.Filter, pLoadCoursesNotifier.Id, pLoadCoursesNotifier.Ids);
         }
     }
 }

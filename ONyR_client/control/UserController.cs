@@ -1,4 +1,4 @@
-﻿using ONyR_client.control.notifiers.User;
+using ONyR_client.control.notifiers.User;
 using ONyR_client.control.commands.User;
 
 namespace ONyR_client.control
@@ -11,6 +11,7 @@ namespace ONyR_client.control
             addConnection(typeof(AddUsersNotifier), typeof(AddUsersCommand));
             addConnection(typeof(ModifyUsersNotifier), typeof(ModifyUsersCommand));
             addConnection(typeof(RemoveUsersNotifier), typeof(RemoveUsersCommand));
+            addConnection(typeof(ModifyPasswordNotifier), typeof(ModifyPasswordCommand));
         }
     }
 }

@@ -8,13 +8,10 @@ namespace ONyR_client.control.notifiers.Course
 
         private CourseVO[] mModifiedCourses;
 
-        private bool mIsForced;
-
-        public ModifyCoursesNotifier(CourseVO[] pOriginalCourses, CourseVO[] pModifiedCourses, bool pIsForced = false)
+        public ModifyCoursesNotifier(CourseVO[] pOriginalCourses, CourseVO[] pModifiedCourses)
         {
             mOriginalCourses = pOriginalCourses;
             mModifiedCourses = pModifiedCourses;
-            this.mIsForced = pIsForced;
         }
 
         public CourseVO[] OriginalCourses
@@ -33,12 +30,9 @@ namespace ONyR_client.control.notifiers.Course
             }
         }
 
-        public bool isForced
+        public override object Clone()
         {
-            get
-            {
-                return mIsForced;
-            }
+            return new ModifyCoursesNotifier(mOriginalCourses, mModifiedCourses);
         }
     }
 }

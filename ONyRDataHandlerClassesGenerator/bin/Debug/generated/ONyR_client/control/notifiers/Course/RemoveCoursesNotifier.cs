@@ -18,5 +18,10 @@ namespace ONyR_client.control.notifiers.Course
                 return mCourses;
             }
         }
+
+        public override object Clone()
+        {
+            return new AddCoursesNotifier(mCourses);
+        }
     }
 }

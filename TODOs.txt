@@ -17,3 +17,149 @@ Cannot be generated:
 -the table itself													N/A
 -new TableAdapter with queries										N/A
 -user interface														N/A
+
+
+------------!!!!!!!!!!!!Szent Írás!!!!!!!!!!!!------------
+SmartInsert Script:
+INSERT INTO [dbo].[University] ([Name]) VALUES (@Name);
+SELECT [ID] FROM [dbo].[University]
+WHERE ID = SCOPE_IDENTITY();
+
+
+INSERT INTO [dbo].[Semester] ([ProgrammeID], [Name], [Year], [Begin], [End], [ExaminationPeriodBegin]) VALUES (@ProgrammeID, @Name, @Year, @Begin, @End, @ExaminationPeriodBegin);
+SELECT [ID] FROM [dbo].[Semester]
+WHERE ID = SCOPE_IDENTITY();
+
+
+---!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!User TABLE QUERIES
+
+-CheckUser
+
+SELECT COUNT(*) FROM SysUser WHERE UserName = @UserName AND Password = @Password
+
+-GetDataByID
+SELECT ID, RoleID, UserName, Password, Title, FirstName, MiddleName, LastName, MothersMaindenName, Email, IdentityCardNumber FROM dbo.SysUser WHERE ID = @ID
+
+-GetDataByUserName
+SELECT ID, RoleID, UserName, 'PASSWORD_PLACE_HOLDER' as Password, Title, FirstName, MiddleName, LastName, MothersMaindenName, Email, IdentityCardNumber, Date FROM dbo.SysUser
+WHERE UserName = @UserName
+
+-UpdateLoginDate
+UPDATE       SysUser
+SET                LastLogin = { fn NOW() }
+WHERE        (ID = @Original_ID)
+
+-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODOS when filling the new VO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    public int ID;
+    public string UserName;
+    public string Title;
+    public string FirstName;
+    public string MiddleName;
+    public string LastName;
+    public string MothersMaidenName;
+    public string EMail;
+    public string IdentityCardNumber;
+    public DateTime LastLogin;
+	
+---------------------------------------IUserService.cs--------------------------------------------------
+	
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => \2 p\3,
+	
+int pID, string pUserName, string pTitle, string pFirstName, string pMiddleName, string pLastName, string pMothersMaidenName, string pEMail, string pIdentityCardNumber, DateTime pLastLogin,
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => \3 = p\3;
+
+ID = pID;
+UserName = pUserName;
+Title = pTitle;
+FirstName = pFirstName;
+MiddleName = pMiddleName;
+LastName = pLastName;
+MothersMaidenName = pMothersMaidenName;
+EMail = pEMail;
+IdentityCardNumber = pIdentityCardNumber;
+LastLogin = pLastLogin;
+
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => && \3 == obj.\3;
+
+ ID == obj.ID
+&& UserName == obj.UserName
+&& Title == obj.Title
+&& FirstName == obj.FirstName
+&& MiddleName == obj.MiddleName
+&& LastName == obj.LastName
+&& MothersMaidenName == obj.MothersMaidenName
+&& EMail == obj.EMail
+&& IdentityCardNumber == obj.IdentityCardNumber
+&& LastLogin == obj.LastLogin
+
+--------------------------------------------------UserVO.cs----------------------------
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => \3 = other.\3;
+
+ID = other.ID;
+UserName = other.UserName;
+Title = other.Title;
+FirstName = other.FirstName;
+MiddleName = other.MiddleName;
+LastName = other.LastName;
+MothersMaidenName = other.MothersMaidenName;
+EMail = other.EMail;
+IdentityCardNumber = other.IdentityCardNumber;
+LastLogin = other.LastLogin;
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => \3 = other.\3;
+
+"ID", "UserName", "Title", "FirstName", "MiddleName", "LastName", "MothersMaidenName", "EMail", "IdentityCardNumber", "LastLogin"
+
+--------------------------------------------------UserService.cs---------------------------
+
+    public int ID;
+    public string UserName;
+    public string Title;
+    public string FirstName;
+    public string MiddleName;
+    public string LastName;
+    public string MothersMaidenName;
+    public string EMail;
+    public string IdentityCardNumber;
+    public DateTime LastLogin;
+	
+// Adding:
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ =>  \3: \"{0}\",
+
+"UserName: \"{0}\", Title: \"{1}\", FirstName: \"{2}\", MiddleName: \"{3}\", LastName: \"{4}\", MothersMaidenName: \"{5}\", EMail: \"{6}\", IdentityCardNumber: \"{7\", LastLogin: \"{8}\",",
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => vo.\3, 
+
+ vo.UserName, vo.Title, vo.FirstName, vo.MiddleName, vo.LastName, vo.MothersMaidenName, vo.EMail, vo.IdentityCardNumber, vo.LastLogin
+ 
+ // Modification:
+ 
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ => \3: \"{0}\" => \"{1}\", 
+
+ID: \"{0}\" => \"{1}\", UserName: \"{2}\" => \"{3}\", Title: \"{4}\" => \"{5}\", FirstName: \"{6}\" => \"{7}\", MiddleName: \"{8}\" => \"{9}\", LastName: \"{10}\" => \"{11}\", MothersMaidenName: \"{12}\" => \"{13}\", EMail: \"{14}\" => \"{15}\", IdentityCardNumber: \"{16}\" => \"{17}\", LastLogin: \"{18}\" => \"{19}\"
+
+^\s*([^\s]+)\s([^\s]+)\s([^;]+);$ =>  , 
+vo.ID, pNewUser[i].ID, vo.UserName, pNewUser[i].UserName, vo.Title, pNewUser[i].Title, vo.FirstName, pNewUser[i].FirstName, vo.MiddleName, pNewUser[i].MiddleName, vo.LastName, pNewUser[i].LastName, vo.MothersMaidenName, pNewUser[i].MothersMaidenName, vo.EMail, pNewUser[i].EMail, vo.IdentityCardNumber, pNewUser[i].IdentityCardNumber, vo.LastLogin, pNewUser[i].LastLogin
+
+
+
+
+LLLL                   OOOO            GGGGGGG
+LLLL                 OOOOOOOO         GGGGGGGGG
+LLLL               OOOO    OOOO      GGGG   GGGG
+LLLL              OOOO      OOOO     GGGG
+LLLL              OOOO      OOOO     GGGG  GGGGG
+LLLL              OOOO      OOOO     GGGG  GGGGG
+LLLL               OOOO    OOOO      GGGG   GGGG
+LLLLLLLLLLLLLLL      OOOOOOOO         GGGG GGGGG
+LLLLLLLLLLLLLLL        OOOO            GGGGGGG G
+
+
+
+INSERT INTO [Log]
+                         (ServiceName, OperationName, Params, UserName, Date)
+VALUES        (@ServiceName,@OperationName,@Params,@UserName, { fn NOW() })

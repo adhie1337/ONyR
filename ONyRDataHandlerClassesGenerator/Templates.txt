@@ -1,4 +1,8 @@
-﻿//@templatename:Data Contract Interface
+﻿//@templatename:Service file
+//@directory:ONyRServiceSite\
+//@filename:<<EntityType>>Service.svc
+<%@ ServiceHost Language="C#" Debug="true" Service="<<EntityType>>Service" CodeBehind="~/App_Code/<<EntityType>>Service.cs" %>
+//@templatename:Data Contract Interface
 //@directory:ONyRServiceSite\App_Code\Interfaces
 //@filename:I<<EntityType>>Service.cs
 using System.Collections.Generic;
@@ -19,15 +23,15 @@ public interface I<<EntityType>>Service
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void Add<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>);
+    List<<<EntityType>>VO> Add<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>);
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void Remove<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>);
+    List<<<EntityType>>VO> Remove<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>);
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void Modify<<EntityTypePlural>>(<<EntityType>>VO[] pOriginal<<EntityTypePlural>>, <<EntityType>>VO[] pNew<<EntityTypePlural>>, bool isForced = false);
+    List<<<EntityType>>VO> Modify<<EntityTypePlural>>(<<EntityType>>VO[] pOriginal<<EntityTypePlural>>, <<EntityType>>VO[] pNew<<EntityTypePlural>>, bool isForced = false);
 }
 
 [DataContract]
@@ -36,46 +40,31 @@ public class <<EntityType>>VO
     [DataMember]
     public int ID;
 
-    public <<EntityType>>VO(int pId)
+	// TODO: Fill the properties
+    /*
+	[DataMember]
+    public string Name;
+	*/
+    
+    public <<EntityType>>VO()
     {
-        ID = pId;
-    }
-}
-
-[DataContract]
-public partial class ONyRFaultException : object, System.Runtime.Serialization.IExtensibleDataObject
-{
-    private int mErrorCode;
-    private ExtensionDataObject mExtensionDataObject;
-
-    public ONyRFaultException(ErrorCode pErrorCode)
-    {
-        mErrorCode = (int)pErrorCode;
     }
 
-    [DataMember]
-    public int ErrorCode
+    public <<EntityType>>VO(int pID/*, string pName*/)
     {
-        get
-        {
-            return mErrorCode;
-        }
-        set
-        {
-            mErrorCode = value;
-        }
+        ID = pID;
+        /*
+		Name = pName;
+		*/
     }
 
-    public ExtensionDataObject ExtensionData
+    public bool Equals(<<EntityType>>VO obj)
     {
-        get
-        {
-            return mExtensionDataObject;
-        }
-        set
-        {
-            mExtensionDataObject = value;
-        }
+        return ID == obj.ID
+			/*
+            && Name == obj.Name
+			*/
+			;
     }
 }
 //@templatename:Sevice class
@@ -83,17 +72,18 @@ public partial class ONyRFaultException : object, System.Runtime.Serialization.I
 //@filename:<<EntityType>>Service.cs
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.ServiceModel;
 using System.ServiceModel.Activation;
 using ONyRDataSetTableAdapters;
-using System.ServiceModel;
 
 [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Required)]
 public class <<EntityType>>Service : I<<EntityType>>Service
 {
     public List<<<EntityType>>VO> Load<<EntityTypePlural>>(<<EntityType>>Filter pFilter, int pId = -1, int[] pIds = null)
     {
-        List<<<EntityType>>VO> retVal = null;
+        List<<<EntityType>>VO> result = null;
         try
         {
             AuthenticationService.CheckIfUSerIsAuthenticated();
@@ -101,7 +91,7 @@ public class <<EntityType>>Service : I<<EntityType>>Service
 
             <<DataTableName>>TableAdapter adapter = new <<DataTableName>>TableAdapter();
             ONyRDataSet.<<DataTableName>>DataTable table;
-            retVal = new List<<<EntityType>>VO>();
+            result = new List<<<EntityType>>VO>();
 
 
             if (pFilter == <<EntityType>>Filter.All)
@@ -126,7 +116,9 @@ public class <<EntityType>>Service : I<<EntityType>>Service
             {
                 if (pFilter != <<EntityType>>Filter.ByIds || pIds.Contains(table[i].ID))
                 {
-                    retVal.Add(new <<EntityType>>VO(table[i].ID));
+				   // TODO: Fill properties here
+				   // TODO: try-catch block for every Nullable field!
+                    result.Add(new <<EntityType>>VO(table[i].ID, table[i].Name));
                 }
             }
 
@@ -135,135 +127,284 @@ public class <<EntityType>>Service : I<<EntityType>>Service
         catch (ONyRException e)
         {
             LogService.LogError(e.ErrorCode, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(e.ErrorCode));
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)e.ErrorCode));
+        }
+        catch (SqlException ex)
+        {
+            string s = "Class: " + ex.Class + "\n";
+            for (int i = 0; i < ex.Errors.Count; i++)
+            {
+                s += "Index #" + i + "\n" +
+                    "Message: " + ex.Errors[i].Message + "\n" +
+                    "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                    "Source: " + ex.Errors[i].Source + "\n" +
+                    "Procedure: " + ex.Errors[i].Procedure + "\n" +
+                    "Class: " + ex.Errors[i].Class + "\n";
+            }
+            LogService.LogError(ErrorCode.UnknownError, null, s);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.DatabaseError));
         }
         catch (Exception e)
         {
-            LogService.LogError(ErrorCode.UnknownError, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(ErrorCode.UnknownError));
+            LogService.LogError(ErrorCode.UnknownError, e.StackTrace, e.Message);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.UnknownError));
         }
 
 
-        return retVal;
-	}
+        return result;
+    }
 
-    public void Add<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
+    public List<<<EntityType>>VO> Add<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
     {
+        List<<<EntityType>>VO> result = new List<<<EntityType>>VO>();
         try
         {
             AuthenticationService.CheckIfUSerIsAuthenticated();
             <<DataTableName>>TableAdapter adapter = new <<DataTableName>>TableAdapter();
+            string logParams = "";
 
             foreach (<<EntityType>>VO vo in p<<EntityTypePlural>>)
             {
-                adapter.Insert();
+                if (logParams.Length > 0)
+                {
+                    logParams += ",\n";
+                }
+
+                // TODO: Fill properties here & Create "Smart Insert Stored Procedure in the dataset!
+                vo.ID = (int)adapter.SmartInsert(vo.Name);
+                result.Add(vo);
+
+                // TODO: Fill properties here
+                logParams += String.Format("Name:\"{0}\"", vo.Name);
             }
 
             adapter.Dispose();
 
-            LogService.Log("<<EntityType>>Service", "Add<<EntityTypePlural>>");
+            LogService.Log("<<EntityType>>Service", "Add<<EntityTypePlural>>", logParams);
         }
         catch (ONyRException e)
         {
-            LogService.LogError(e.ErrorCode, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(e.ErrorCode));
+            LogService.LogError(e.ErrorCode,  e.StackTrace);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)e.ErrorCode));
+        }
+        catch (SqlException ex)
+        {
+            string s = "Class: " + ex.Class + "\n";
+            for (int i = 0; i < ex.Errors.Count; i++)
+            {
+                s += "Index #" + i + "\n" +
+                    "Message: " + ex.Errors[i].Message + "\n" +
+                    "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                    "Source: " + ex.Errors[i].Source + "\n" +
+                    "Procedure: " + ex.Errors[i].Procedure + "\n" +
+                    "Class: " + ex.Errors[i].Class + "\n";
+            }
+            LogService.LogError(ErrorCode.UnknownError, null, s);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.DatabaseError));
         }
         catch (Exception e)
         {
-            LogService.LogError(ErrorCode.UnknownError, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(ErrorCode.UnknownError));
+            LogService.LogError(ErrorCode.UnknownError, e.StackTrace, e.Message);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.UnknownError));
         }
+
+        return result;
     }
 
-    public void Remove<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
+    public List<<<EntityType>>VO> Remove<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
     {
-        try{
+		List<<<EntityType>>VO> result = null;
+        try
+        {
             AuthenticationService.CheckIfUSerIsAuthenticated();
             <<DataTableName>>TableAdapter adapter = new <<DataTableName>>TableAdapter();
+            string logParams = "";
 
             foreach (<<EntityType>>VO vo in p<<EntityTypePlural>>)
             {
+                if (logParams.Length > 0)
+                {
+                    logParams += ",\n";
+                }
+
                 adapter.Delete(vo.ID);
+				result.Add(vo);
+
+                // TODO: Fill properties here
+                logParams += String.Format("ID:\"{1}\", Name:\"{1}\"", vo.ID, vo.Name);
             }
 
             adapter.Dispose();
 
-            LogService.Log("<<EntityType>>Service", "Add<<EntityTypePlural>>");
+            LogService.Log("<<EntityType>>Service", "Remove<<EntityTypePlural>>", logParams);
         }
         catch (ONyRException e)
         {
             LogService.LogError(e.ErrorCode, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(e.ErrorCode));
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)e.ErrorCode));
+        }
+        catch (SqlException ex)
+        {
+            string s = "Class: " + ex.Class + "\n";
+            for (int i = 0; i < ex.Errors.Count; i++)
+            {
+                s += "Index #" + i + "\n" +
+                    "Message: " + ex.Errors[i].Message + "\n" +
+                    "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                    "Source: " + ex.Errors[i].Source + "\n" +
+                    "Procedure: " + ex.Errors[i].Procedure + "\n" +
+                    "Class: " + ex.Errors[i].Class + "\n";
+            }
+            LogService.LogError(ErrorCode.UnknownError, null, s);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.DatabaseError));
         }
         catch (Exception e)
         {
-            LogService.LogError(ErrorCode.UnknownError, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(ErrorCode.UnknownError));
+            LogService.LogError(ErrorCode.UnknownError, e.StackTrace, e.Message);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.UnknownError));
         }
+
+		return result;
     }
 
-    public void Modify<<EntityTypePlural>>(<<EntityType>>VO[] pOriginal<<EntityTypePlural>>, <<EntityType>>VO[] pNew<<EntityTypePlural>>, bool isForced=false)
+    public List<<<EntityType>>VO> Modify<<EntityTypePlural>>(<<EntityType>>VO[] pOriginal<<EntityTypePlural>>, <<EntityType>>VO[] pNew<<EntityTypePlural>>, bool isForced = false)
     {
-        try{
+		List<<<EntityType>>VO> result = new List<<<EntityType>>VO>();
+        try
+        {
             AuthenticationService.CheckIfUSerIsAuthenticated();
             <<DataTableName>>TableAdapter adapter = new <<DataTableName>>TableAdapter();
+            string logParams = "";
+            bool modifyConflict = false;
 
             for (int i = 0; i < Math.Min(pOriginal<<EntityTypePlural>>.Length, pNew<<EntityTypePlural>>.Length); ++i)
             {
                 ONyRDataSet.<<DataTableName>>Row row = adapter.GetDataByID(pNew<<EntityTypePlural>>[i].ID)[0];
+                // TODO: Fill properties here
+				// TODO: Watch out for null values!
+
                 <<EntityType>>VO vo = new <<EntityType>>VO(row.ID);
 
                 if (vo.Equals(pOriginal<<EntityTypePlural>>[i]) || isForced)
                 {
-                    adapter.Update();
+                    if (logParams.Length > 0)
+                    {
+                        logParams += ",\n";
+                    }
+
+					result.Add(vo);
+
+                    // TODO: Fill properties here
+                    adapter.Update(pNew<<EntityTypePlural>>[i].Name, vo.ID);
+                    logParams += String.Format("Name:\"{0}\" => \"{1}\"", vo.Name, pNew<<EntityTypePlural>>[i].Name);
                 }
                 else
                 {
-                    throw new ONyRException(ErrorCode.ModifyConflict);
+                    modifyConflict = true;
                 }
             }
 
             adapter.Dispose();
 
-            LogService.Log("<<EntityType>>Service", "Modify<<EntityTypePlural>>");
+            LogService.Log("<<EntityType>>Service", "Modify<<EntityTypePlural>>", logParams);
+			
+            if (modifyConflict)
+            {
+                throw new ONyRException(ErrorCode.ModifyConflict);
+            }
         }
         catch (ONyRException e)
         {
             LogService.LogError(e.ErrorCode, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(e.ErrorCode));
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)e.ErrorCode));
+        }
+        catch (SqlException ex)
+        {
+            string s = "Class: " + ex.Class + "\n";
+            for (int i = 0; i < ex.Errors.Count; i++)
+            {
+                s += "Index #" + i + "\n" +
+                    "Message: " + ex.Errors[i].Message + "\n" +
+                    "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                    "Source: " + ex.Errors[i].Source + "\n" +
+                    "Procedure: " + ex.Errors[i].Procedure + "\n" +
+                    "Class: " + ex.Errors[i].Class + "\n";
+            }
+            LogService.LogError(ErrorCode.UnknownError, null, s);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.DatabaseError));
         }
         catch (Exception e)
         {
-            LogService.LogError(ErrorCode.UnknownError, e.StackTrace);
-            throw new FaultException<ONyRFaultException>(new ONyRFaultException(ErrorCode.UnknownError));
+            LogService.LogError(ErrorCode.UnknownError, e.StackTrace, e.Message);
+            throw new FaultException<ONyRFaultException>(new ONyRFaultException((int)ErrorCode.UnknownError));
         }
+
+		return result;
     }
-
 }
-
 //@templatename:Value Object class
 //@directory:ONyR_client\model\vo
 //@filename:<<EntityType>>VO.cs
 namespace ONyR_client.model.vo
 {
-    class <<EntityType>>VO : <<EntityType>>ServiceSkeleton.<<EntityType>>VO, IValueObject<<<EntityType>>VO>
+    public class <<EntityType>>VO : <<EntityType>>ServiceReference.<<EntityType>>VO, IValueObject<<<EntityType>>VO>
     {
         public <<EntityType>>VO Clone()
         {
-            return new <<EntityType>>VO().FillFromSkeleton(this);
+            return new <<EntityType>>VO().FillFromServiceReference(this);
         }
 
-        public <<EntityType>>VO FillFromSkeleton(object pSkeleton)
+        public <<EntityType>>VO FillFromServiceReference(object pReference)
         {
-            <<EntityType>>ServiceSkeleton.<<EntityType>>VO other = (<<EntityType>>ServiceSkeleton.<<EntityType>>VO)pSkeleton;
+            <<EntityType>>ServiceReference.<<EntityType>>VO other = (<<EntityType>>ServiceReference.<<EntityType>>VO)pReference;
 
+            // TODO: Fill properties here
             ID = other.ID;
 
             return this;
         }
+
+        private VOStateManager mStateManager;
+
+        private VOStateManager StateManager
+        {
+            get
+            {
+                if (mStateManager == null)
+                {
+            // TODO: Fill properties here
+                    mStateManager = new VOStateManager(new string[] { "ID" }, this);
+                }
+                return mStateManager;
+            }
+        }
+
+        public VOState GetState()
+        {
+            return StateManager.GetState();
+        }
+
+        public void SetState(VOState pState)
+        {
+            StateManager.SetState(pState);
+        }
+
+        public void StoreState()
+        {
+            StateManager.StoreState();
+        }
+
+        public void RestoreState()
+        {
+            StateManager.RestoreState();
+        }
+
+        public bool StateIsEqualTo(VOState pState)
+        {
+            return StateManager.StateIsEqualTo(pState);
+        }
     }
 }
-
 //@templatename:Model class
 //@directory:ONyR_client\model\models
 //@filename:<<EntityType>>Model.cs
@@ -273,21 +414,21 @@ using ONyR_client.model.vo;
 
 namespace ONyR_client.model.models
 {
-    class <<EntityType>>Model : Model
+    public class <<EntityType>>Model : Model
     {
+
+        #region Members
+
+        private Dictionary<int, <<EntityType>>VO> m<<EntityTypePlural>>;
+
+        #endregion
 
         #region Constructor
 
         public <<EntityType>>Model()
         {
-            m<<EntityTypePlural>> = new List<<<EntityType>>VO>();
+            m<<EntityTypePlural>> = new Dictionary<int, <<EntityType>>VO>();
         }
-
-        #endregion
-
-        #region Properties
-
-        private List<<<EntityType>>VO> m<<EntityTypePlural>>;
 
         #endregion
 
@@ -295,42 +436,38 @@ namespace ONyR_client.model.models
 
         public <<EntityType>>VO Get<<EntityType>>ByID(int pID)
         {
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
-            {
-                if (m<<EntityTypePlural>>[i].ID == pID)
-                {
-                    return m<<EntityTypePlural>>[i].Clone();
-                }
-            }
-
-            return null;
+            return m<<EntityTypePlural>>[pID].Clone();
         }
 
         public List<<<EntityType>>VO> Get<<EntityTypePlural>>ByIDs(int[] pIDs)
         {
-            List<<<EntityType>>VO> retVal = new List<<<EntityType>>VO>();
+            List<<<EntityType>>VO> result = new List<<<EntityType>>VO>();
 
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
+            int[] keys = m<<EntityTypePlural>>.Keys.ToArray();
+
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(m<<EntityTypePlural>>[i].ID))
+                if (keys.Contains(pIDs[i]))
                 {
-                    retVal.Add(m<<EntityTypePlural>>[i].Clone());
+                    result.Add(m<<EntityTypePlural>>[pIDs[i]].Clone());
                 }
             }
 
-            return retVal;
+            return result;
         }
 
         public List<<<EntityType>>VO> GetAll<<EntityTypePlural>>()
         {
-            List<<<EntityType>>VO> retVal = new List<<<EntityType>>VO>();
+            List<<<EntityType>>VO> result = new List<<<EntityType>>VO>();
 
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
+            int[] keys = m<<EntityTypePlural>>.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
             {
-                retVal.Add(m<<EntityTypePlural>>[i].Clone());
+                result.Add(m<<EntityTypePlural>>[keys[i]].Clone());
             }
 
-            return retVal;
+            return result;
         }
 
         #endregion
@@ -339,93 +476,70 @@ namespace ONyR_client.model.models
 
         public void Add<<EntityType>>(<<EntityType>>VO p<<EntityType>>)
         {
-            m<<EntityTypePlural>>.Add(p<<EntityType>>);
+            m<<EntityTypePlural>>[p<<EntityType>>.ID] = p<<EntityType>>;
             update();
         }
 
         public void Add<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
         {
-            m<<EntityTypePlural>>.AddRange(p<<EntityTypePlural>>);
+            foreach (<<EntityType>>VO vo in p<<EntityTypePlural>>)
+            {
+                m<<EntityTypePlural>>[vo.ID] = vo.Clone();
+            }
+
             update();
         }
 
         public void Remove<<EntityType>>ByID(int pID)
         {
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
-            {
-                if (m<<EntityTypePlural>>[i].ID == pID)
-                {
-                    m<<EntityTypePlural>>.RemoveAt(i);
-                    update();
-                    break;
-                }
-            }
+            m<<EntityTypePlural>>.Remove(pID);
         }
 
         public void Remove<<EntityTypePlural>>ByIDs(int[] pIDs)
         {
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
+            for (int i = 0; i < pIDs.Count(); ++i)
             {
-                if (pIDs.Contains(m<<EntityTypePlural>>[i].ID))
-                {
-                    m<<EntityTypePlural>>.RemoveAt(i);
-                    --i;
-                }
+                m<<EntityTypePlural>>.Remove(pIDs[i]);
             }
             update();
         }
 
         public void Modify<<EntityType>>(<<EntityType>>VO p<<EntityType>>)
         {
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
-            {
-                if (m<<EntityTypePlural>>[i].ID == p<<EntityType>>.ID)
-                {
-                    m<<EntityTypePlural>>.RemoveAt(i);
-                    break;
-                }
-            }
-
-            m<<EntityTypePlural>>.Add(p<<EntityType>>);
-            update();
+            Add<<EntityType>>(p<<EntityType>>);
         }
 
         public void Modify<<EntityTypePlural>>(<<EntityType>>VO[] p<<EntityTypePlural>>)
         {
-            for (int i = 0; i < m<<EntityTypePlural>>.Count; ++i)
-            {
-                if (p<<EntityTypePlural>>.Contains(m<<EntityTypePlural>>[i]))
-                {
-                    m<<EntityTypePlural>>.RemoveAt(i);
-                    --i;
-                }
-            }
-
-            m<<EntityTypePlural>>.AddRange(p<<EntityTypePlural>>);
-            update();
+            Add<<EntityTypePlural>>(p<<EntityTypePlural>>);
         }
 
 
         public void Empty()
         {
-            m<<EntityTypePlural>>.RemoveRange(0, m<<EntityTypePlural>>.Count);
+            int[] keys = m<<EntityTypePlural>>.Keys.ToArray();
+
+            for (int i = 0; i < keys.Count(); ++i)
+            {
+                m<<EntityTypePlural>>.Remove(keys[i]);
+            }
+
             update();
         }
 
         #endregion
     }
 }
-
 //@templatename:Delegate class
-//@directory:ONyR_client\control\delegates
-//@filename:<<EntityType>>ServiceDelegate.csusing System;
+//@directory:ONyR_client\control\business\delegates
+//@filename:<<EntityType>>ServiceDelegate.cs
 using System;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using ONyR_client.control.business.responders;
 using ONyR_client.model;
-using ONyR_client.<<EntityType>>ServiceSkeleton;
+using ONyR_client.<<EntityType>>ServiceReference;
 
 namespace ONyR_client.control.business.delegates
 {
@@ -439,22 +553,24 @@ namespace ONyR_client.control.business.delegates
 
         private <<EntityType>>ServiceClient GetClient()
         {
-            <<EntityType>>ServiceClient retVal = new <<EntityType>>ServiceClient();
-            OperationContextScope scope = new OperationContextScope(retVal.InnerChannel);
+            <<EntityType>>ServiceClient result = new <<EntityType>>ServiceClient();
+            OperationContextScope scope = new OperationContextScope(result.InnerChannel);
             var prop = new HttpRequestMessageProperty();
             prop.Headers.Add(HttpRequestHeader.Cookie, ModelLocator.getInstance().SessionModel.SessionCookie);
             OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = prop;
 
-            return retVal;
+            return result;
         }
 
-        private ONyR_client.model.vo.<<EntityType>>VO[] Convert(<<EntityType>>VO[] originals)
+        private <<EntityType>>VO[] ConvertToServer(<<EntityType>>VO[] originals)
         {
-            ONyR_client.model.vo.<<EntityType>>VO[] serialized = new ONyR_client.model.vo.<<EntityType>>VO[originals.Length];
+            <<EntityType>>VO[] serialized = new <<EntityType>>VO[originals.Length];
 
             for (int i = 0; i < originals.Length; ++i)
             {
-                serialized[i] = new model.vo.<<EntityType>>VO().FillFromSkeleton(originals[i]);
+                // TODO: Fill properties here
+                serialized[i] = new <<EntityType>>VO();
+                serialized[i].ID = originals[i].ID;
             }
 
             return serialized;
@@ -466,8 +582,9 @@ namespace ONyR_client.control.business.delegates
 
             try
             {
-                <<EntityType>>VO[] retVal = client.Load<<EntityTypePlural>>(pFilter, pID, pIDs);
-                mResponder.Load<<EntityTypePlural>>Result(Convert(retVal));
+                ModelLocator.getInstance().SessionModel.NotifyOneOperationBegin();
+                client.Load<<EntityTypePlural>>Completed += new EventHandler<Load<<EntityTypePlural>>CompletedEventArgs>(mResponder.Load<<EntityTypePlural>>Result);
+                client.Load<<EntityTypePlural>>Async(pFilter, pID, pIDs);
             }
             catch (FaultException<ONyRFaultException> ex)
             {
@@ -489,14 +606,15 @@ namespace ONyR_client.control.business.delegates
 
             try
             {
-                client.Add<<EntityTypePlural>>(p<<EntityTypePlural>>);
-                mResponder.Add<<EntityTypePlural>>Result(Convert(p<<EntityTypePlural>>));
+                ModelLocator.getInstance().SessionModel.NotifyOneOperationBegin();
+                client.Add<<EntityTypePlural>>Completed += new EventHandler<Add<<EntityTypePlural>>CompletedEventArgs>(mResponder.Add<<EntityTypePlural>>Result);
+                client.Add<<EntityTypePlural>>Async(ConvertToServer(p<<EntityTypePlural>>));
             }
             catch (FaultException<ONyRFaultException> ex)
             {
                 mResponder.Add<<EntityTypePlural>>Fault((ErrorCode)ex.Detail.ErrorCode);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 mResponder.Add<<EntityTypePlural>>Fault(ErrorCode.NonONyRError);
             }
@@ -512,8 +630,9 @@ namespace ONyR_client.control.business.delegates
 
             try
             {
-                client.Remove<<EntityTypePlural>>(p<<EntityTypePlural>>);
-                mResponder.Remove<<EntityTypePlural>>Result(Convert(p<<EntityTypePlural>>));
+                ModelLocator.getInstance().SessionModel.NotifyOneOperationBegin();
+                client.Remove<<EntityTypePlural>>Completed += new EventHandler<Remove<<EntityTypePlural>>CompletedEventArgs>(mResponder.Remove<<EntityTypePlural>>Result);
+                client.Remove<<EntityTypePlural>>Async(ConvertToServer(p<<EntityTypePlural>>));
             }
             catch (FaultException<ONyRFaultException> ex)
             {
@@ -535,8 +654,9 @@ namespace ONyR_client.control.business.delegates
 
             try
             {
-                client.Modify<<EntityTypePlural>>(pOriginal<<EntityTypePlural>>, pNew<<EntityTypePlural>>, isForced);
-                mResponder.Modify<<EntityTypePlural>>Result(Convert(pNew<<EntityTypePlural>>));
+                ModelLocator.getInstance().SessionModel.NotifyOneOperationBegin();
+                client.Modify<<EntityTypePlural>>Completed += new EventHandler<Modify<<EntityTypePlural>>CompletedEventArgs>(mResponder.Modify<<EntityTypePlural>>Result);
+                client.Modify<<EntityTypePlural>>Async(ConvertToServer(pOriginal<<EntityTypePlural>>), ConvertToServer(pNew<<EntityTypePlural>>), isForced);
             }
             catch (FaultException<ONyRFaultException> ex)
             {
@@ -553,55 +673,66 @@ namespace ONyR_client.control.business.delegates
         }
     }
 }
-
 //@templatename:Responder class
-//@directory:ONyR_client\control\responders
+//@directory:ONyR_client\control\business\responders
 //@filename:<<EntityType>>ServiceResponder.cs
 using ONyR_client.model;
 using ONyR_client.model.vo;
+using ONyR_client.<<EntityType>>ServiceReference;
 
 namespace ONyR_client.control.business.responders
 {
     class <<EntityType>>ServiceResponder : Responder
     {
-        public void Load<<EntityTypePlural>>Result(<<EntityType>>VO[] pLoaded<<EntityTypePlural>>)
-        {
-            ModelLocator locator = ModelLocator.getInstance();
 
-            for (int i = 0; i < pLoaded<<EntityTypePlural>>.Length; ++i)
+        private ONyR_client.model.vo.<<EntityType>>VO[] Convert(ONyR_client.<<EntityType>>ServiceReference.<<EntityType>>VO[] originals)
+        {
+            ONyR_client.model.vo.<<EntityType>>VO[] serialized = new ONyR_client.model.vo.<<EntityType>>VO[originals.Length];
+
+            for (int i = 0; i < originals.Length; ++i)
             {
-                if (pLoaded<<EntityTypePlural>>[i].ID == locator.SessionModel.<<EntityType>>Id)
-                {
-                    locator.SessionModel.SetCurrent<<EntityType>>(pLoaded<<EntityTypePlural>>[i]);
-                }
+                serialized[i] = new model.vo.<<EntityType>>VO().FillFromServiceReference(originals[i]);
             }
 
-            locator.<<EntityType>>Model.Add<<EntityTypePlural>>(pLoaded<<EntityTypePlural>>);
+            return serialized;
+        }
+
+        public void Load<<EntityTypePlural>>Result(object sender, Load<<EntityTypePlural>>CompletedEventArgs e)
+        {
+			ONyR_client.model.vo.<<EntityType>>VO[] loaded<<EntityTypePlural>> = Convert(e.Result);
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
+            ModelLocator.getInstance().<<EntityType>>Model.Add<<EntityTypePlural>>(loaded<<EntityTypePlural>>);
         }
 
         public void Load<<EntityTypePlural>>Fault(ErrorCode pCode)
         {
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
             ApplicationFaultManager.Fault(pCode, Initiator);
         }
 
-        public void Add<<EntityTypePlural>>Result(<<EntityType>>VO[] pAdded<<EntityTypePlural>>)
+        public void Add<<EntityTypePlural>>Result(object sender, Add<<EntityTypePlural>>CompletedEventArgs e)
         {
-            ModelLocator.getInstance().<<EntityType>>Model.Add<<EntityTypePlural>>(pAdded<<EntityTypePlural>>);
+			ONyR_client.model.vo.<<EntityType>>VO[] added<<EntityTypePlural>> = Convert(e.Result);
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
+            ModelLocator.getInstance().<<EntityType>>Model.Add<<EntityTypePlural>>(added<<EntityTypePlural>>);
         }
 
         public void Add<<EntityTypePlural>>Fault(ErrorCode pCode)
         {
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
             ApplicationFaultManager.Fault(pCode, Initiator);
         }
 
-        public void Remove<<EntityTypePlural>>Result(<<EntityType>>VO[] pRemoved<<EntityTypePlural>>)
+        public void Remove<<EntityTypePlural>>Result(object sender, Remove<<EntityTypePlural>>CompletedEventArgs e)
         {
+			ONyR_client.model.vo.<<EntityType>>VO[] removed<<EntityTypePlural>> = Convert(e.Result);
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
             ModelLocator locator = ModelLocator.getInstance();
-            int[] ids = new int[pRemoved<<EntityTypePlural>>.Length];
+            int[] ids = new int[removed<<EntityTypePlural>>.Length];
 
-            for (int i = 0; i < pRemoved<<EntityTypePlural>>.Length; ++i)
+            for (int i = 0; i < removed<<EntityTypePlural>>.Length; ++i)
             {
-                ids[i] = pRemoved<<EntityTypePlural>>[i].ID;
+                ids[i] = removed<<EntityTypePlural>>[i].ID;
             }
 
             locator.<<EntityType>>Model.Remove<<EntityTypePlural>>ByIDs(ids);
@@ -609,22 +740,25 @@ namespace ONyR_client.control.business.responders
 
         public void Remove<<EntityTypePlural>>Fault(ErrorCode pCode)
         {
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
             ApplicationFaultManager.Fault(pCode, Initiator);
         }
 
-        public void Modify<<EntityTypePlural>>Result(<<EntityType>>VO[] pNew<<EntityTypePlural>>)
+        public void Modify<<EntityTypePlural>>Result(object sender, Modify<<EntityTypePlural>>CompletedEventArgs e)
         {
-            ModelLocator.getInstance().<<EntityType>>Model.Modify<<EntityTypePlural>>(pNew<<EntityTypePlural>>);
+			ONyR_client.model.vo.<<EntityType>>VO[] new<<EntityTypePlural>> = Convert(e.Result);
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
+            ModelLocator.getInstance().<<EntityType>>Model.Modify<<EntityTypePlural>>(new<<EntityTypePlural>>);
         }
 
         public void Modify<<EntityTypePlural>>Fault(ErrorCode pCode)
         {
+            ModelLocator.getInstance().SessionModel.NotifyOneOperationDone();
             ApplicationFaultManager.Fault(pCode, Initiator);
         }
 
     }
 }
-
 //@templatename:Controller class
 //@directory:ONyR_client\control
 //@filename:<<EntityType>>Controller.cs
@@ -644,18 +778,19 @@ namespace ONyR_client.control
         }
     }
 }
-
 //@templatename:Load notifier class
 //@directory:ONyR_client\control\notifiers\<<EntityType>>
 //@filename:Load<<EntityTypePlural>>Notifier.cs
 namespace ONyR_client.control.notifiers.<<EntityType>>
 {
+    public enum <<EntityType>>Filter
+    {
+		// TODO: Change this
+        ById=0, ByIds, All
+    }
+
     class Load<<EntityTypePlural>>Notifier : Notifier
     {
-        public enum <<EntityType>>Filter
-        {
-            ById=0, ByIds, All
-        };
 
         public Load<<EntityTypePlural>>Notifier(<<EntityType>>Filter pFilter, int pId = -1, int[] pIds = null)
         {
@@ -709,7 +844,6 @@ namespace ONyR_client.control.notifiers.<<EntityType>>
         }
     }
 }
-
 //@templatename:Add notifier class
 //@directory:ONyR_client\control\notifiers\<<EntityType>>
 //@filename:Add<<EntityTypePlural>>Notifier.cs
@@ -740,7 +874,6 @@ namespace ONyR_client.control.notifiers.<<EntityType>>
         }
     }
 }
-
 //@templatename:Modify notifier class
 //@directory:ONyR_client\control\notifiers\<<EntityType>>
 //@filename:Modify<<EntityTypePlural>>Notifier.cs
@@ -782,7 +915,6 @@ namespace ONyR_client.control.notifiers.<<EntityType>>
         }
     }
 }
-
 //@templatename:Remove notifier class
 //@directory:ONyR_client\control\notifiers\<<EntityType>>
 //@filename:Remove<<EntityTypePlural>>Notifier.cs
@@ -813,7 +945,6 @@ namespace ONyR_client.control.notifiers.<<EntityType>>
         }
     }
 }
-
 //@templatename:Load command class
 //@directory:ONyR_client\control\commands\<<EntityType>>
 //@filename:Load<<EntityTypePlural>>Command.cs
@@ -830,11 +961,10 @@ namespace ONyR_client.control.commands.<<EntityType>>
             new <<EntityType>>ServiceDelegate(
                 pLoad<<EntityTypePlural>>Notifier,
                 new <<EntityType>>ServiceResponder()
-            ).Load<<EntityTypePlural>>((<<EntityType>>ServiceSkeleton.<<EntityType>>Filter)pLoad<<EntityTypePlural>>Notifier.Filter, pLoad<<EntityTypePlural>>Notifier.Id, pLoad<<EntityTypePlural>>Notifier.Ids);
+            ).Load<<EntityTypePlural>>((<<EntityType>>ServiceReference.<<EntityType>>Filter)pLoad<<EntityTypePlural>>Notifier.Filter, pLoad<<EntityTypePlural>>Notifier.Id, pLoad<<EntityTypePlural>>Notifier.Ids);
         }
     }
 }
-
 //@templatename:Add command class
 //@directory:ONyR_client\control\commands\<<EntityType>>
 //@filename:Add<<EntityTypePlural>>Command.cs
@@ -855,7 +985,6 @@ namespace ONyR_client.control.commands.<<EntityType>>
         }
     }
 }
-
 //@templatename:Modify command class
 //@directory:ONyR_client\control\commands\<<EntityType>>
 //@filename:Modify<<EntityTypePlural>>Command.cs
@@ -876,7 +1005,6 @@ namespace ONyR_client.control.commands.<<EntityType>>
         }
     }
 }
-
 //@templatename:Remove command class
 //@directory:ONyR_client\control\commands\<<EntityType>>
 //@filename:Remove<<EntityTypePlural>>Command.cs

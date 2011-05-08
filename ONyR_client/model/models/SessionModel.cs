@@ -5,11 +5,24 @@ using System.Text;
 using ONyR_client.model.vo;
 using ONyR_client.control;
 using ONyR_client.control.notifiers.User;
+using ONyR_client.view;
 
 namespace ONyR_client.model.models
 {
-    class SessionModel : Model
+    public class SessionModel : Model, IONyRObservable<ApplicationState>
     {
+
+        #region Members
+
+        private string mSessionCookie = null;
+        private int mSessionId = -1;
+        private int mUserId = -1;
+        private string mASPSessionId = null;
+        private UserVO mCurrentUser = null;
+        private List<IONyRObserver<ApplicationState>> mObservers;
+        private int mOperationsLoading = 0;
+
+        #endregion
 
         #region Constructor
 
@@ -21,12 +34,6 @@ namespace ONyR_client.model.models
 
         #region Properties
 
-        private string mSessionCookie = null;
-        private int mSessionId = -1;
-        private int mUserId = -1;
-        private string mASPSessionId = null;
-        private UserVO mCurrentUser = null;
-
         public bool IsLoggedIn
         {
             get
@@ -34,10 +41,6 @@ namespace ONyR_client.model.models
                 return mSessionId != -1 || CurrentUser != null;
             }
         }
-
-        #endregion
-
-        #region Queries
 
         public string SessionCookie
         {
@@ -79,10 +82,47 @@ namespace ONyR_client.model.models
             }
         }
 
+        public ApplicationState CurrentState
+        {
+            get
+            {
+                if (mOperationsLoading > 0)
+                {
+                    return ApplicationState.Loading;
+                }
+                else if (!IsLoggedIn)
+                {
+                    return ApplicationState.Offline;
+                }
+                else if (CurrentUser == null)
+                {
+                    return ApplicationState.Anonimous;
+                }
+                else
+                {
+                    return ApplicationState.Online;
+                }
+            }
+        }
 
         #endregion
 
         #region Model manipulation
+
+        public void NotifyOneOperationBegin()
+        {
+            ++mOperationsLoading;
+            update();
+        }
+
+        public void NotifyOneOperationDone()
+        {
+            if (mOperationsLoading > 0)
+            {
+                --mOperationsLoading;
+            }
+            update();
+        }
 
         public void Logout()
         {
@@ -126,6 +166,42 @@ namespace ONyR_client.model.models
         {
             mCurrentUser = pCurrentUser;
             update();
+        }
+
+        #endregion
+
+        #region IONyRObservable<ApplicationState> Members
+
+        public void Subscribe(IONyRObserver<ApplicationState> observer)
+        {
+            if (mObservers == null)
+            {
+                mObservers = new List<IONyRObserver<ApplicationState>>();
+            }
+
+            mObservers.Add(observer);
+        }
+
+        public void RefreshObservers()
+        {
+            if (mObservers != null)
+            {
+                foreach (IONyRObserver<ApplicationState> o in mObservers)
+                {
+                    o.Refresh(CurrentState);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Overridden methods
+
+        protected override void update()
+        {
+            base.update();
+
+            RefreshObservers();
         }
 
         #endregion

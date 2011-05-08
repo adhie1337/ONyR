@@ -11,7 +11,9 @@ public enum ErrorCode
     InvalidSessionError,
     UnknownError,
     ModifyConflict,
-    InvalidCredentialsError
+    InvalidCredentialsError,
+    ClientRuntimeError,
+    ReferenceError
 }
 
 /// <summary>

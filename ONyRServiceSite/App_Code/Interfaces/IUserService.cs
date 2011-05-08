@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System;
 
 public enum UserFilter
 {
@@ -16,15 +17,19 @@ public interface IUserService
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void AddUsers(UserVO[] pUsers);
+    List<UserVO> AddUsers(UserVO[] pUser);
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void RemoveUsers(UserVO[] pUsers);
+    List<UserVO> RemoveUsers(UserVO[] pUser);
 
     [OperationContract]
     [FaultContractAttribute(typeof(ONyRFaultException))]
-    void ModifyUsers(UserVO[] pOriginalUsers, UserVO[] pNewUsers, bool isForced = false);
+    List<UserVO> ModifyUsers(UserVO[] pOriginalUser, UserVO[] pNewUser, bool isForced = false);
+
+    [OperationContract]
+    [FaultContractAttribute(typeof(ONyRFaultException))]
+    void ModifyPassword(string pOriginalPassword, string pNewPassword);
 }
 
 [DataContract]
@@ -37,49 +42,58 @@ public class UserVO
     public string UserName;
 
     [DataMember]
-    public string Name;
-
-    public UserVO(int pId, string pUserName, string pName)
-    {
-        ID = pId;
-        UserName = pUserName;
-        Name = pName;
-    }
-}
-
-[DataContract]
-public partial class ONyRFaultException : object, System.Runtime.Serialization.IExtensibleDataObject
-{
-    private int mErrorCode;
-    private ExtensionDataObject mExtensionDataObject;
-
-    public ONyRFaultException(ErrorCode pErrorCode)
-    {
-        mErrorCode = (int)pErrorCode;
-    }
+    public string Title;
 
     [DataMember]
-    public int ErrorCode
+    public string FirstName;
+
+    [DataMember]
+    public string MiddleName;
+
+    [DataMember]
+    public string LastName;
+
+    [DataMember]
+    public string MothersMaidenName;
+
+    [DataMember]
+    public string EMail;
+
+    [DataMember]
+    public string IdentityCardNumber;
+
+    [DataMember]
+    public DateTime LastLogin;
+    
+    public UserVO()
     {
-        get
-        {
-            return mErrorCode;
-        }
-        set
-        {
-            mErrorCode = value;
-        }
     }
 
-    public ExtensionDataObject ExtensionData
+    public UserVO(int pID, string pUserName, string pTitle, string pFirstName, string pMiddleName, string pLastName, string pMothersMaidenName, string pEMail, string pIdentityCardNumber, DateTime pLastLogin)
     {
-        get
-        {
-            return mExtensionDataObject;
-        }
-        set
-        {
-            mExtensionDataObject = value;
-        }
+        ID = pID;
+        UserName = pUserName;
+        Title = pTitle;
+        FirstName = pFirstName;
+        MiddleName = pMiddleName;
+        LastName = pLastName;
+        MothersMaidenName = pMothersMaidenName;
+        EMail = pEMail;
+        IdentityCardNumber = pIdentityCardNumber;
+        LastLogin = pLastLogin;
+    }
+
+    public bool Equals(UserVO obj)
+    {
+        return ID == obj.ID
+            && UserName == obj.UserName
+            && Title == obj.Title
+            && FirstName == obj.FirstName
+            && MiddleName == obj.MiddleName
+            && LastName == obj.LastName
+            && MothersMaidenName == obj.MothersMaidenName
+            && EMail == obj.EMail
+            && IdentityCardNumber == obj.IdentityCardNumber
+            && LastLogin == obj.LastLogin;
     }
 }

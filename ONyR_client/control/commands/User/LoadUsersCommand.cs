@@ -11,7 +11,7 @@ namespace ONyR_client.control.commands.User
             new UserServiceDelegate(
                 pLoadUsersNotifier,
                 new UserServiceResponder()
-            ).LoadUsers((UserServiceSkeleton.UserFilter)pLoadUsersNotifier.Filter, pLoadUsersNotifier.Id, pLoadUsersNotifier.Ids);
+            ).LoadUsers((UserServiceReference.UserFilter)pLoadUsersNotifier.Filter, pLoadUsersNotifier.Id, pLoadUsersNotifier.Ids);
         }
     }
 }

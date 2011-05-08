@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ONyR_client.AuthenticationServiceSkeleton;
+using ONyR_client.AuthenticationServiceReference;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Net;
 using ONyR_client.model;
 using ONyR_client.control.business.responders;
+using ONyR_client.UserServiceReference;
 
 namespace ONyR_client.control.business.delegates
 {
@@ -21,40 +22,43 @@ namespace ONyR_client.control.business.delegates
 
         public void Login(string username, string password)
         {
-            bool retVal = false;
+            bool result = false;
 
             AuthenticationServiceClient client = new AuthenticationServiceClient();
             OperationContextScope scope = new OperationContextScope(client.InnerChannel);
 
-            try{
+            try
+            {
 
-            retVal = client.Login(username, password, null, false);
+                result = client.Login(username, password, null, false);
                 MessageProperties props = OperationContext.Current.IncomingMessageProperties;
                 HttpResponseMessageProperty prop = props[HttpResponseMessageProperty.Name] as HttpResponseMessageProperty;
                 string rawCookies = prop.Headers[HttpResponseHeader.SetCookie];
 
+                if (!result)
+                {
+                    ONyRFaultException e = new ONyRFaultException();
+                    e.ErrorCode = (int)ErrorCode.InvalidCredentialsError;
+                    throw new FaultException<ONyRFaultException>(e);
+                }
+
                 mResponder.LoginResult(FormatCookie(rawCookies));
             }
-            catch(Exception ex)
+            catch (FaultException<ONyRFaultException> ex)
             {
-                int code;
-                ErrorCode errorCode = ErrorCode.NonONyRError;
-
-                try
-                {
-                    code = System.Convert.ToInt32(ex.Message);
-                    errorCode = (ErrorCode)code;
-                }
-                catch (Exception)
-                {
-                    // If it was not our Exception, we handle an "Unknown Exception".
-                    errorCode = ErrorCode.NonONyRError;
-                }
-
-                mResponder.LoginFault(errorCode);
+                mResponder.LoginFault((ErrorCode)ex.Detail.ErrorCode);
             }
-
-            client.Close();
+            catch (Exception)
+            {
+                mResponder.LoginFault(ErrorCode.NonONyRError);
+            }
+            finally
+            {
+                if (client != null)
+                {
+                    client.Close();
+                }
+            }
         }
 
         public void Logout()
@@ -70,23 +74,13 @@ namespace ONyR_client.control.business.delegates
                 client.Logout();
                 mResponder.LogoutResult();
             }
-            catch (Exception ex)
+            catch (FaultException<ONyRFaultException> ex)
             {
-                int code;
-                ErrorCode errorCode = ErrorCode.NonONyRError;
-
-                try
-                {
-                    code = System.Convert.ToInt32(ex.Message);
-                    errorCode = (ErrorCode)code;
-                }
-                catch (Exception)
-                {
-                    // If it was not our Exception, we handle an "Unknown Exception".
-                    errorCode = ErrorCode.NonONyRError;
-                }
-
-                mResponder.LogoutFault(errorCode);
+                mResponder.LogoutFault((ErrorCode)ex.Detail.ErrorCode);
+            }
+            catch (Exception)
+            {
+                mResponder.LogoutFault(ErrorCode.NonONyRError);
             }
             finally
             {
@@ -99,7 +93,7 @@ namespace ONyR_client.control.business.delegates
 
         public static bool IsLoggedIn()
         {
-            bool retVal = false;
+            bool result = false;
 
             AuthenticationServiceClient client = new AuthenticationServiceClient();
             OperationContextScope scope = new OperationContextScope(client.InnerChannel);
@@ -107,11 +101,11 @@ namespace ONyR_client.control.business.delegates
             prop.Headers.Add(HttpRequestHeader.Cookie, ModelLocator.getInstance().SessionModel.SessionCookie);
             OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = prop;
 
-            retVal = client.IsLoggedIn();
+            result = client.IsLoggedIn();
 
             client.Close();
 
-            return retVal;
+            return result;
         }
 
         /// <summary>

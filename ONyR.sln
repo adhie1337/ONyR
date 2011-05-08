@@ -9,6 +9,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ONyRServiceSite", "ONyRServiceSite\", "{0F49FE4B-7AE5-4C94-9BD3-AE2C5D321BB8}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = ""
 		Debug.AspNetCompiler.VirtualPath = "/ONyRServiceSite"
 		Debug.AspNetCompiler.PhysicalPath = "ONyRServiceSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ONyRServiceSite\"

@@ -2,56 +2,26 @@ using ONyR_client.model.vo;
 
 namespace ONyR_client.control.notifiers.Course
 {
-    class LoadCoursesNotifier : Notifier
+    class AddCoursesNotifier : Notifier
     {
-        public enum CourseFilter
+        public AddCoursesNotifier(CourseVO[] pCourses)
         {
-            ById=0, ByIds, All
-        };
-
-        public LoadCoursesNotifier(CourseFilter pFilter, int pId = -1, int[] pIds = null)
-        {
-            mfeFilter = pFilter;
-            miId = pId;
-            maIds = pIds;
+            mCourses = pCourses;
         }
 
-        private CourseFilter mfeFilter;
-        private int miId;
-        private int[] maIds;
+        private CourseVO[] mCourses;
 
-        public CourseFilter Filter
+        public CourseVO[] Courses
         {
             get
             {
-                return mfeFilter;
+                return mCourses;
             }
         }
 
-        public int Id
+        override public object Clone()
         {
-            get
-            {
-                if (mfeFilter == CourseFilter.ById)
-                {
-                    return miId;
-                }
-
-                return -1;
-            }
-        }
-
-        public int[] Ids
-        {
-            get
-            {
-                if (mfeFilter == CourseFilter.ByIds)
-                {
-                    return maIds;
-                }
-
-                return null;
-            }
+            return new AddCoursesNotifier(mCourses);
         }
     }
 }

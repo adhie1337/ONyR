@@ -1,5 +1,6 @@
-using ONyR_client.control.notifiers.Course;
 using ONyR_client.control.business.delegates;
+using ONyR_client.control.business.responders;
+using ONyR_client.control.notifiers.Course;
 
 namespace ONyR_client.control.commands.Course
 {
@@ -7,7 +8,10 @@ namespace ONyR_client.control.commands.Course
     {
         override protected void execute(RemoveCoursesNotifier pRemoveCoursesNotifier)
         {
-            CourseServiceDelegate.RemoveCourses(pRemoveCoursesNotifier.Courses);
+            new CourseServiceDelegate(
+                    pRemoveCoursesNotifier,
+                    new CourseServiceResponder()
+                ).RemoveCourses(pRemoveCoursesNotifier.Courses);
         }
     }
 }

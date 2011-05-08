@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Temp.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates.txt">

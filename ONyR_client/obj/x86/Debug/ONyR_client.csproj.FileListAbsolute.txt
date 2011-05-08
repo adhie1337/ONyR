@@ -9,4 +9,8 @@ D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.exe
 D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.pdb
 D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.MainForm.resources
 D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.LoginForm.resources
-D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.CourseViewer.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.UserEditor.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.ProgrammeEditor.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.LogViewer.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.UserEditorForm.resources
+D:\projects\cs\szakdoga\ONyR\ONyR_client\obj\x86\Debug\ONyR_client.view.ChangePasswordForm.resources

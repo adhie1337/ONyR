@@ -3,20 +3,38 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Security;
 using ONyRDataSetTableAdapters;
+using System.Security.Cryptography;
+using System.Text;
 
 public class AuthenticationService
 {
-    public static bool authenticate(string userName, string passWord)
+    private static string hashPassword(string pass)
     {
-        bool retVal = false;
+        SHA256CryptoServiceProvider hash = new SHA256CryptoServiceProvider();
+
+        byte[] a = hash.ComputeHash(Encoding.UTF8.GetBytes(pass + "_ONyR_salt"));
+
+        StringBuilder sb = new StringBuilder(a.Length * 2);
+        foreach (byte b in a)
+        {
+            sb.AppendFormat("{0:X2}", b);
+        }
+
+        return sb.ToString();
+    }
+
+    public static bool authenticate(string userName, string password)
+    {
+        bool result = false;
+        string encodedPass = hashPassword(password);
 
         SysUserTableAdapter userAdapter = new SysUserTableAdapter();
-        retVal = userAdapter.CheckUser(userName, passWord) != 0;
+        result = (int)userAdapter.CheckUser(userName, encodedPass) != 0;
         userAdapter.Dispose();
 
-        LogService.Log("AuthenticationService", "authenticate", String.Format("username:{0}; result:{1}", userName, retVal));
+        LogService.Log("AuthenticationService", "authenticate", String.Format("username:{0}; result:{1}", userName, result));
 
-        return retVal;
+        return result;
     }
 
     public static void Authenticating(object sender, System.Web.ApplicationServices.AuthenticatingEventArgs e)
@@ -33,7 +51,6 @@ public class AuthenticationService
 
         SysUserTableAdapter userAdapter = new SysUserTableAdapter();
         users = userAdapter.GetDataByUserName(e.UserName);
-        userAdapter.Dispose();
 
         if(users.Count == 0)
         {
@@ -42,19 +59,21 @@ public class AuthenticationService
 
         ONyRDataSet.SysUserRow user = users[0];
 
-
         SysSessionTableAdapter sessionAdapter = new SysSessionTableAdapter();
         sessions = sessionAdapter.GetDataByUserID(user.ID);
 
         foreach(ONyRDataSet.SysSessionRow row in sessions)
         {
-            sessionAdapter.Delete(row.ID);
+            sessionAdapter.Delete1(row.ID);
         }
 
         sessionAdapter.CreateSession(user.ID);
         sessions = sessionAdapter.GetDataByUserID(user.ID);
         session = sessions[0];
         sessionAdapter.Dispose();
+
+        userAdapter.UpdateLoginDate(user.ID);
+        userAdapter.Dispose();
 
         HttpContext.Current.Response.Cookies.Add(new HttpCookie("UserId", user.ID.ToString()));
         HttpContext.Current.Response.Cookies.Add(new HttpCookie("SessionId", session.ID.ToString()));
@@ -71,7 +90,7 @@ public class AuthenticationService
 
         bool validSession = false;
         SysSessionTableAdapter sessionAdapter = new SysSessionTableAdapter();
-        sessions = sessionAdapter.GetDataByUserID(Convert.ToInt32(HttpContext.Current.Request.Cookies["UserId"]));
+        sessions = sessionAdapter.GetDataByUserID(Convert.ToInt32(HttpContext.Current.Request.Cookies["UserId"].Value));
 
         foreach (ONyRDataSet.SysSessionRow row in sessions)
         {
@@ -81,13 +100,26 @@ public class AuthenticationService
             }
             else
             {
-                sessionAdapter.Delete(row.ID);
+                sessionAdapter.Delete1(row.ID);
             }
         }
 
         if (!validSession)
         {
             throw new ONyRException(ErrorCode.InvalidSessionError);
+        }
+    }
+
+    public static void ChangePassword(string pOldPassword, string pNewPassword)
+    {
+        int userID = Convert.ToInt32(HttpContext.Current.Request.Cookies["UserId"].Value);
+
+        SysUserTableAdapter adapter = new SysUserTableAdapter();
+        int i = adapter.ModifyPassword(pNewPassword, pOldPassword, userID);
+
+        if (i == 0)
+        {
+            throw new ONyRException(ErrorCode.InvalidCredentialsError);
         }
     }
 }

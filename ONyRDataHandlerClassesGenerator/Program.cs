@@ -12,9 +12,16 @@ namespace ONyRDataHandlerClassesGenerator
 
         private const string TEMPLATE_FILE_NAME = "Templates.txt";
 
+        private static RunMode mode = RunMode.Normal;
+
         private enum ErrorCode
         {
-            InvalidArg=0, LockedFile
+            InvalidArg = 0, LockedFile
+        }
+
+        private enum RunMode
+        {
+            Clean, Normal, NoClean
         }
 
         static void Main(string[] args)
@@ -23,26 +30,27 @@ namespace ONyRDataHandlerClassesGenerator
 
             if(args.Count() != 0)
             {
-                if (args.Count() > 1 || args[0] != "-clean")
+                if (args.Count() > 1 || args[0] != "-clean" && args[0] != "-noclean")
                 {
                     Error(ErrorCode.InvalidArg, args[0]);
                 }
                 else
                 {
-                    CleanUp();
+                    mode = args[0] != "-clean" ? RunMode.NoClean : RunMode.Clean;
                 }
             }
-            else
+            
+            properties["DataTableName"] = null;
+            properties["EntityType"] = null;
+            properties["EntityTypePlural"] = null;
+
+            Generate();
+
+            if (mode != RunMode.Clean)
             {
-                properties["DataTableName"] = null;
-                properties["EntityType"] = null;
-                properties["EntityTypePlural"] = null;
-
-                Generate();
+                Console.WriteLine("Done! Bye-bye!");
+                Console.ReadKey();
             }
-
-            Console.WriteLine("Done! Bye-bye!");
-            Console.ReadKey();
         }
 
         private static void CleanUp()
@@ -54,71 +62,81 @@ namespace ONyRDataHandlerClassesGenerator
 
         private static void Generate()
         {
-            Console.WriteLine("For cleaning the generated code, please run with -clean command line argument!");
-            Console.WriteLine("For the proper generaion, please add a few properties.");
-
-            string[] keys = properties.Keys.ToArray();
-
-            foreach (string actProperty in keys)
+            if (mode != RunMode.Clean)
             {
-                bool correct = false;
-                do
+                Console.WriteLine("For cleaning the generated code, please run with -clean command line argument!");
+                Console.WriteLine("For generating but leaving the last generated code, please run with -noclean command line argument!");
+                Console.WriteLine("For the proper generaion, please add a few properties.");
+
+                string[] keys = properties.Keys.ToArray();
+
+                foreach (string actProperty in keys)
                 {
-                    Console.Write(actProperty + ": ");
-                    properties[actProperty] = Console.ReadLine().Trim();
-                    Console.Write(String.Format("\"{0}\" = \"{1}\".\nIs that correct(y/n)? ", actProperty, properties[actProperty]));
-                    string answer = Console.ReadLine().Trim().ToLower();
-                    correct = answer == "y" || answer == "";
+                    bool correct = false;
+                    do
+                    {
+                        Console.Write(actProperty + ": ");
+                        properties[actProperty] = Console.ReadLine().Trim();
+                        Console.Write(String.Format("\"{0}\" = \"{1}\".\nIs that correct(y/n)? ", actProperty, properties[actProperty]));
+                        string answer = Console.ReadLine().Trim().ToLower();
+                        correct = answer == "y" || answer == "";
+                    }
+                    while (!correct);
                 }
-                while (!correct);
             }
 
-            CleanUp();
-
-            StreamReader reader = new StreamReader(TEMPLATE_FILE_NAME);
-            StreamWriter writer = null;
-            string directoryname = null;
-
-            while (!reader.EndOfStream)
+            if (mode != RunMode.NoClean)
             {
-                string line = reader.ReadLine();
+                CleanUp();
+            }
 
-                if (line.StartsWith("//@"))
+            if (mode != RunMode.Clean)
+            {
+                StreamReader reader = new StreamReader(TEMPLATE_FILE_NAME);
+                StreamWriter writer = null;
+                string directoryname = null;
+
+                while (!reader.EndOfStream)
                 {
-                    if (line.StartsWith("//@templatename:"))
+                    string line = reader.ReadLine();
+
+                    if (line.StartsWith("//@"))
                     {
-                        if (writer != null)
+                        if (line.StartsWith("//@templatename:"))
                         {
-                            writer.Close();
+                            if (writer != null)
+                            {
+                                writer.Close();
+                            }
+
+                            Console.WriteLine("Writing file: {0}", FormatLine(line.Substring("//@templatename:".Length)));
                         }
-
-                        Console.WriteLine("Writing file: {0}", FormatLine(line.Substring("//@templatename:".Length)));
+                        else if (line.StartsWith("//@filename:"))
+                        {
+                            SwitchDirectory(directoryname);
+                            string filename = FormatLine(line.Substring("//@filename:".Length));
+                            writer = new StreamWriter(filename);
+                        }
+                        else if (line.StartsWith("//@directory:"))
+                        {
+                            directoryname = FormatLine(line.Substring("//@directory:".Length));
+                        }
                     }
-                    else if (line.StartsWith("//@filename:"))
+                    else
                     {
-                        SwitchDirectory(directoryname);
-                        string filename = FormatLine(line.Substring("//@filename:".Length));
-                        writer = new StreamWriter(filename);
-                    }
-                    else if (line.StartsWith("//@directory:"))
-                    {
-                        directoryname = FormatLine(line.Substring("//@directory:".Length));
+                        writer.WriteLine(FormatLine(line, false));
                     }
                 }
-                else
+
+                if (writer != null)
                 {
-                    writer.WriteLine(FormatLine(line, false));
+                    writer.Close();
                 }
-            }
 
-            if (writer != null)
-            {
-                writer.Close();
-            }
-
-            if (reader != null)
-            {
-                reader.Close();
+                if (reader != null)
+                {
+                    reader.Close();
+                }
             }
         }
 
